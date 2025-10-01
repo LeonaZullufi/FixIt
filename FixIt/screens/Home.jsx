@@ -1,7 +1,8 @@
-// File: screens/Home.jsx
 import React from "react";
 import { View, Text, Button, StyleSheet, Alert, Image } from "react-native";
-
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+//Demo
 export default function Home() {
   const handlePress = () => {
     Alert.alert("Ju klikuat butonin!");
@@ -9,18 +10,18 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      {/* Logo */}
-      <Image
-        source={require("../assets/logo1.png")}
-        style={styles.logo}
-        resizeMode="contain"
-      />
+      <Header />
 
-      {/* Teksti */}
-      <Text style={styles.title}>Mirësevini në FixIt!</Text>
-
-      {/* Butoni */}
-      <Button title="Kliko mua" onPress={handlePress} />
+      <View style={styles.content}>
+        <Image
+          source={require("../assets/logo.png")}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <Text style={styles.title}>Mirësevini në FixIt!</Text>
+        <Button title="Kliko mua" onPress={handlePress} />
+      </View>
+      <Footer />
     </View>
   );
 }
@@ -28,14 +29,17 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f0f8ff",
+  },
+  content: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f0f8ff",
   },
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 20, // hapësirë midis logos dhe tekstit
+    marginBottom: 20,
   },
   title: {
     fontSize: 24,
