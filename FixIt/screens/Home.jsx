@@ -29,7 +29,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f8ff",
+    backgroundColor: "#e0e0e0",
   },
   content: {
     flex: 1,

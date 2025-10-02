@@ -21,7 +21,7 @@ export default function Footer() {
         </View>
 
         <Image
-          source={require("../assets/help&support_icon.png")}
+          source={require("../assets/help_icon.png")}
           style={styles.icon}
         />
         <Image
