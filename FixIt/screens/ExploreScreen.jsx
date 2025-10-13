@@ -1,28 +1,51 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 import bannerImage from "../assets/explore.png";
 
+const Stack = createNativeStackNavigator();
 const ExploreScreen = () => {
   const stats = [
-    { id: 1, label: "Probleme të zgjidhura", value: 124, color: "#27B4E2", emoji: "✅" },
+    {
+      id: 1,
+      label: "Probleme të zgjidhura",
+      value: 124,
+      color: "#27B4E2",
+      emoji: "✅",
+    },
     { id: 2, label: "Në pritje", value: 37, color: "#FF6663", emoji: "🕓" },
-    { id: 3, label: "Në lagjen tënde", value: 12, color: "#003F91", emoji: "📍" },
-    { id: 4, label: "Përdorues aktivë", value: 45, color: "#2D2D2D", emoji: "👥" },
+    {
+      id: 3,
+      label: "Në lagjen tënde",
+      value: 12,
+      color: "#003F91",
+      emoji: "📍",
+    },
+    {
+      id: 4,
+      label: "Përdorues aktivë",
+      value: 45,
+      color: "#2D2D2D",
+      emoji: "👥",
+    },
   ];
 
-   const facts = [
+  const facts = [
     "Çdo raportim i vogël ndihmon ta bëjmë lagjen më të pastër 🌍.",
     "Përdoruesit e FixIt kanë zgjidhur mbi 1000 probleme këtë vit!",
   ];
 
   return (
     <View style={styles.container}>
-   
       <Header title="FixIt App" />
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <Image source={bannerImage} style={styles.banner} />
 
         <View style={styles.welcomeContainer}>
@@ -31,8 +54,13 @@ const ExploreScreen = () => {
 
         <View style={styles.cardContainer}>
           {stats.map((item) => (
-            <View key={item.id} style={[styles.card, { backgroundColor: item.color }]}>
-              <Text style={styles.cardTitle}>{item.emoji} {item.label}</Text>
+            <View
+              key={item.id}
+              style={[styles.card, { backgroundColor: item.color }]}
+            >
+              <Text style={styles.cardTitle}>
+                {item.emoji} {item.label}
+              </Text>
               <Text style={styles.cardValue}>{item.value}</Text>
             </View>
           ))}
@@ -40,15 +68,25 @@ const ExploreScreen = () => {
 
         <View style={styles.successSection}>
           <Text style={styles.successTitle}>Sukseset e fundit</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.successScroll}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.successScroll}
+          >
             <View style={styles.successCard}>
-              <Text style={styles.successText}>💡 Drita e rrugës në “Rr. Dëshmorët” është rregulluar</Text>
+              <Text style={styles.successText}>
+                💡 Drita e rrugës në “Rr. Dëshmorët” është rregulluar
+              </Text>
             </View>
             <View style={styles.successCard}>
-              <Text style={styles.successText}>🚮 Pastrimi i mbeturinave në “Rr. Iliria” u krye</Text>
+              <Text style={styles.successText}>
+                🚮 Pastrimi i mbeturinave në “Rr. Iliria” u krye
+              </Text>
             </View>
             <View style={styles.successCard}>
-              <Text style={styles.successText}>💧 Uji është rikthyer në “Lagjja Kalabria”</Text>
+              <Text style={styles.successText}>
+                💧 Uji është rikthyer në “Lagjja Kalabria”
+              </Text>
             </View>
           </ScrollView>
         </View>
@@ -60,7 +98,6 @@ const ExploreScreen = () => {
         </View>
       </ScrollView>
 
-      
       <Footer />
     </View>
   );
@@ -101,17 +138,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   card: {
-  width: "48%",
-  borderRadius: 12,
-  padding: 15,
-  marginBottom: 12,
-  minHeight: 100, 
-  justifyContent: "center",
-  shadowColor: "#000",
-  shadowOpacity: 0.1,
-  shadowRadius: 5,
-  elevation: 3,
-},
+    width: "48%",
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 12,
+    minHeight: 100,
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
 
   cardTitle: {
     fontSize: 14,
@@ -130,7 +167,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 12,
     backgroundColor: "white",
-    marginBottom:20
+    marginBottom: 20,
   },
   successTitle: {
     fontSize: 18,
@@ -156,7 +193,7 @@ const styles = StyleSheet.create({
     color: "#004A8F",
     padding: 5,
   },
-   factBox: {
+  factBox: {
     backgroundColor: "#e6f7ff",
     borderRadius: 10,
     padding: 20,
@@ -174,8 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#333",
     textAlign: "center",
-  }
+  },
 });
-
 
 export default ExploreScreen;
