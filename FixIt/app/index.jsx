@@ -1,12 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import Header from "../components/Header.jsx";
-import Footer from "../components/Footer.jsx";
 import bannerImage from "../assets/explore.png";
 
-const Stack = createNativeStackNavigator();
 const ExploreScreen = () => {
   const stats = [
     {
@@ -40,8 +35,6 @@ const ExploreScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="FixIt App" />
-
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -97,8 +90,6 @@ const ExploreScreen = () => {
           </Text>
         </View>
       </ScrollView>
-
-      <Footer />
     </View>
   );
 };

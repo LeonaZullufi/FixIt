@@ -10,12 +10,10 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
-import Header from "../components/Header";
 import AboutAppComponent from "../components/contacts/AboutAppComponent";
 import FAQSectionComponent from "../components/contacts/FAQSectionComponent";
 import ContactSection from "../components/contacts/ContactSection";
 import AppInfo from "../components/contacts/AppInfo";
-import Footer from "../components/Footer";
 
 export default function ContactScreen() {
   const [form, setForm] = useState({
@@ -40,7 +38,6 @@ export default function ContactScreen() {
 
   return (
     <View style={styles.mainContainer}>
-      <Header />
       <KeyboardAwareScrollView
         style={styles.contentContainer}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -122,7 +119,6 @@ export default function ContactScreen() {
           <ContactSection />
         </View>
       </KeyboardAwareScrollView>
-      <Footer />
     </View>
   );
 }

@@ -1,18 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Footer from "../components/Footer.jsx";
-import Header from "../components/Header.jsx";
 
 export default function ReportScreen() {
   return (
     <View style={styles.container}>
-      <Header title="FixIt App" />
-
       <View style={styles.content}>
-        <Text>Here is the Report page</Text>
+        <Text>Here is the Problems page</Text>
       </View>
-
-      <Footer />
     </View>
   );
 }
