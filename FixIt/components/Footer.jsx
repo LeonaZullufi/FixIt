@@ -1,35 +1,48 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 export default function Footer() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.footer}>
       <View style={styles.iconRow}>
-        <Image
-          source={require("../assets/home_icon.png")}
-          style={styles.icon}
-        />
-        <Image
-          source={require("../assets/location_icon.png")}
-          style={styles.icon}
-        />
-        <View style={styles.logoWrapper}>
+        <TouchableOpacity onPress={() => navigation.navigate("Explore")}>
           <Image
-            source={require("../assets/logo.png")}
-            style={styles.logoIcon}
+            source={require("../assets/home_icon.png")}
+            style={styles.icon}
           />
-        </View>
+        </TouchableOpacity>
 
-        <Image
-          source={require("../assets/help_icon.png")}
-          style={styles.icon}
-        />
-        <Image
-          source={require("../assets/profile_icon.png")}
-          style={styles.icon}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate("Problems")}>
+          <Image
+            source={require("../assets/location_icon.png")}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Report")}>
+          <View style={styles.logoWrapper}>
+            <Image
+              source={require("../assets/logo.png")}
+              style={styles.logoIcon}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Help")}>
+          <Image
+            source={require("../assets/help_icon.png")}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <Image
+            source={require("../assets/profile_icon.png")}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
       </View>
-
       <Text style={styles.text}>FixIt</Text>
     </View>
   );
@@ -37,7 +50,8 @@ export default function Footer() {
 
 const styles = StyleSheet.create({
   footer: {
-    borderRadius: 15,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
     backgroundColor: "#023e8a",
     paddingVertical: 10,
     alignItems: "center",
