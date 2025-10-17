@@ -105,7 +105,7 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
-        name="ProfileScreen"
+        name="Profile"
         options={{
           title: "Profile",
           tabBarIcon: ({ focused, size }) => (

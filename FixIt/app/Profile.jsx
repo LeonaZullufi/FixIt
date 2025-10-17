@@ -3,8 +3,6 @@ import { View, Text, ScrollView, Modal, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsCard from "../components/settings/SettingsCard";
 import SettingsScreen from "./SettingsScreen";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 export default function ProfileScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
