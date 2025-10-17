@@ -6,7 +6,7 @@ import Splash from "./screens/Splash";
 import ExploreScreen from "./screens/ExploreScreen";
 import ReportScreen from "./screens/ReportScreen";
 import ContatsHelp from "./screens/ContactsHelp";
-import ProfileScreen from "./screens/ProfileScreen";
+import ProfileScreen from "./screens/Profile";
 import ProblemsScreen from "./screens/ProblemsScreen";
 
 const Stack = createNativeStackNavigator();
