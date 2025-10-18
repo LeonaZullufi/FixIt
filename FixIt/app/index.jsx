@@ -97,7 +97,7 @@ const ExploreScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F4F7F9",
+    backgroundColor: "#fff",
   },
   scrollContent: {
     padding: 16,

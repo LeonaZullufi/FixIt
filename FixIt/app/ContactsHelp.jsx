@@ -124,7 +124,7 @@ export default function ContactScreen() {
 }
 
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, backgroundColor: "white" },
+  mainContainer: { flex: 1, backgroundColor: "#fff" },
 
   contentContainer: {
     flexGrow: 1,
