@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import SettingsList from "../components/settings/SettingsList";
+import SettingsList from "./SettingsList";
 
 export default function SettingsScreen({ onClose }) {
   const [notifications, setNotifications] = useState(true);

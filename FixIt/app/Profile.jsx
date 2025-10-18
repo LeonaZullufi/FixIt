@@ -1,10 +1,39 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, Modal, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsCard from "../components/settings/SettingsCard";
-import SettingsScreen from "./SettingsScreen";
+import SettingsScreen from "../components/settings/SettingsScreen";
+import { useNavigation } from "expo-router";
 
 export default function ProfileScreen() {
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Profile",
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => setIsModalVisible(true)}
+          style={{ marginRight: 50 }}
+        >
+          <Ionicons name="settings-outline" size={24} color="white" />
+        </TouchableOpacity>
+      ),
+      headerStyle: {
+        backgroundColor: "#023e8a",
+        borderBottomLeftRadius: 90,
+        borderBottomRightRadius: 90,
+      },
+      headerTitleAlign: "center",
+      headerTintColor: "white",
+    });
+  }, [navigation]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const stats = [
@@ -15,7 +44,13 @@ export default function ProfileScreen() {
       color: "#F5A623",
       emoji: "📋",
     },
-    { id: "2", label: "Të ndrequra", value: 12, color: "#4CD964", emoji: "✅" },
+    {
+      id: "2",
+      label: "Të rregulluar",
+      value: 12,
+      color: "#4CD964",
+      emoji: "✅",
+    },
     {
       id: "3",
       label: "Në progres",
@@ -28,7 +63,6 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Header onOpenSettings={() => setIsModalVisible(true)} />
       <View style={styles.contentWrapper}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -52,14 +86,19 @@ export default function ProfileScreen() {
             </View>
           </View>
         </ScrollView>
-
-        <Footer />
       </View>
-      {isModalVisible && (
-        <Modal transparent animationType="slide">
-          <SettingsScreen onClose={() => setIsModalVisible(false)} />
-        </Modal>
-      )}
+      <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <SettingsScreen onClose={() => setIsModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -101,5 +140,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    height: "100%",
   },
 });

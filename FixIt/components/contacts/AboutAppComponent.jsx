@@ -53,8 +53,8 @@ const AboutAppComponent = () => {
         <Text style={styles.stepTitle}> 4. Ndiq progresin</Text>
       </View>
       <Text style={styles.bullet}>
-        • Shko te seksioni “Raportet e mia” për të parë nëse raporti yt është Në
-        pritje, Në proces apo I rregulluar.
+        • Shko te seksioni “Raportimet e mia” për të parë nëse raporti yt është
+        Në pritje, Në proces apo I rregulluar.
       </Text>
 
       <View style={styles.step}>

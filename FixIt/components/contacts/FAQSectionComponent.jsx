@@ -27,7 +27,7 @@ const FAQSectionComponent = () => {
       </Text>
       <Text style={styles.answer}>
         Kjo varet nga koha e reagimit të komunës suaj lokale. Ju mund t’i ndiqni
-        përditësimet në seksionin “Raportet e mia”.
+        përditësimet në seksionin “Raportimet e mia”.
       </Text>
 
       <Text style={styles.question}>
