@@ -56,6 +56,14 @@ const markers = [
     longitude: 20.78917,
     image: require('../assets/ProblemOnMap/MbeturinaSkenderaj.jpg'),
   },
+  {
+    id: 6,
+    title: "Këndi i lojrave është dëmtuar - Prishtinë",
+    description: "Këndi i lojërave në bregun e diellit është pa mirëmbajtje dhe i rrezikshëm",
+    latitude: 42.654329,
+    longitude: 21.174757,
+    image: require('../assets/ProblemOnMap/KendiLojrave.jpg'),
+  },
 ];
 
 export default function ReportScreen() {
@@ -63,8 +71,8 @@ export default function ReportScreen() {
   const [region, setRegion] = useState({
     latitude: 42.6,
     longitude: 20.9,
-    latitudeDelta: 0.50,
-    longitudeDelta: 0.60,
+    latitudeDelta: 0.55,
+    longitudeDelta: 0.65,
   });
 
   const onRegionChangeComplete = (newRegion) => {
