@@ -1,32 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MapView, { Marker } from "react-native-maps";
 import { StatusBar } from "expo-status-bar";
 
 export default function ReportScreen() {
-  const [selectedLocation, setSelectedLocation] = useState(null);
-
-  const handleMapPress = (event) => {
-    setSelectedLocation(event.nativeEvent.coordinate);
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <Text style={styles.title}>Raporto një problem</Text>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 42.6675,
-          longitude: 21.1662,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }}
-        onPress={handleMapPress}
-      >
-        {selectedLocation && <Marker coordinate={selectedLocation} />}
-      </MapView>
+
+      <Image
+        source={require("../assets/map.png")}
+        style={styles.mapImage}
+        resizeMode="cover"
+      />
 
       <View style={styles.photoSection}>
         <TouchableOpacity style={styles.cameraButton}>
@@ -37,6 +24,7 @@ export default function ReportScreen() {
           <Text style={styles.cameraText}>Shto Foto</Text>
         </TouchableOpacity>
       </View>
+
       <TouchableOpacity style={styles.submitButton}>
         <Text style={styles.submitText}>Dërgo Raportin</Text>
       </TouchableOpacity>
@@ -51,15 +39,17 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    color: "white",
+    color: "#023e8a",
     fontSize: 24,
     fontWeight: "bold",
     marginVertical: 10,
   },
-  map: {
-    flex: 1,
+  mapImage: {
+    width: "90%",
+    height: 300,
+    alignSelf: "center",
     borderRadius: 20,
-    margin: 10,
+    marginVertical: 10,
   },
   photoSection: {
     alignItems: "center",
