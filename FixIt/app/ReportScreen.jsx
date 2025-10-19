@@ -11,6 +11,7 @@ export default function ReportScreen() {
     navigation.setOptions({
       title: "FixIt",
       headerStyle: {
+        height: 75,
         backgroundColor: "#023e8a", 
       },
       headerTitleAlign: "center",
