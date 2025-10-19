@@ -9,7 +9,7 @@ export default function ReportScreen() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Raporto Problem",
+      title: "FixIt",
       headerStyle: {
         backgroundColor: "#023e8a", 
       },
