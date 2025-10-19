@@ -7,15 +7,15 @@ export default function SettingsScreen({ onClose }) {
   const [notifications, setNotifications] = useState(true);
   const [expandedSetting, setExpandedSetting] = useState(null);
   const [language, setLanguage] = useState("English");
-  const languages = ["English", "Albanian", "German"];
+  const languages = ["Anglisht", "Shqip", "Gjermanisht"];
   const [theme, setTheme] = useState("Light");
-  const themes = ["Light", "Dark"];
+  const themes = ["", "Dark"];
 
   const settings = [
     {
       id: "1",
       icon: "globe",
-      label: "Language",
+      label: "Gjuha",
       value: language,
       type: "button",
     },

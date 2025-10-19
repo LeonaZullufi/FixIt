@@ -38,8 +38,20 @@ export default function ProfileScreen() {
   }, [navigation]);
 
   const stats = [
-    { id: "1", label: "Raportimet e mia", value: 28, color: "#F5A623", emoji: "📋" },
-    { id: "2", label: "Të rregulluar", value: 12, color: "#4CD964", emoji: "✅" },
+    {
+      id: "1",
+      label: "Raportimet e mia",
+      value: 28,
+      color: "#F5A623",
+      emoji: "📋",
+    },
+    {
+      id: "2",
+      label: "Të rregulluar",
+      value: 12,
+      color: "#4CD964",
+      emoji: "✅",
+    },
     { id: "3", label: "Në progres", value: 9, color: "#007AFF", emoji: "🔄" },
     { id: "4", label: "Në pritje", value: 7, color: "#FF3B30", emoji: "🕓" },
   ];
@@ -82,8 +94,8 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { 
-    flex: 1
+  safeArea: {
+    flex: 1,
   },
   container: {
     flex: 1,

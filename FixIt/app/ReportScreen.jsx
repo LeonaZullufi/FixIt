@@ -1,6 +1,5 @@
 import React, { useLayoutEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "expo-router";
 
@@ -11,7 +10,7 @@ export default function ReportScreen() {
     navigation.setOptions({
       title: "Raporto Problem",
       headerStyle: {
-        backgroundColor: "#023e8a", 
+        backgroundColor: "#023e8a",
       },
       headerTitleAlign: "center",
       headerTintColor: "white",
@@ -19,7 +18,7 @@ export default function ReportScreen() {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar style="light" backgroundColor="#023e8a" />
 
       <Text style={styles.title}>Raporto një problem</Text>
@@ -43,14 +42,14 @@ export default function ReportScreen() {
       <TouchableOpacity style={styles.submitButton}>
         <Text style={styles.submitText}>Dërgo Raportin</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
+    paddingTop: 45,
   },
   title: {
     textAlign: "center",
