@@ -42,7 +42,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Home",
+            title: "Ballina",
             tabBarIcon: ({ focused, size }) => (
               <Image
                 source={
@@ -58,7 +58,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="ProblemsScreen"
           options={{
-            title: "Problems",
+            title: "Raportimet",
             tabBarIcon: ({ focused, size }) => (
               <Image
                 source={
@@ -90,7 +90,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="ContactsHelp"
           options={{
-            title: "Help",
+            title: "Ndihmë",
             tabBarIcon: ({ focused, size }) => (
               <Image
                 source={
@@ -106,7 +106,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="Profile"
           options={{
-            title: "Profile",
+            title: "Profil",
             tabBarIcon: ({ focused, size }) => (
               <Image
                 source={

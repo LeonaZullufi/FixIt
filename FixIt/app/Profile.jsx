@@ -19,7 +19,7 @@ export default function ProfileScreen() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Profile",
+      headerTitle: "Profil",
       headerRight: () => (
         <TouchableOpacity
           onPress={() => setIsModalVisible(true)}
