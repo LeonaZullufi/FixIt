@@ -6,10 +6,10 @@ import SettingsList from "./SettingsList";
 export default function SettingsScreen({ onClose }) {
   const [notifications, setNotifications] = useState(true);
   const [expandedSetting, setExpandedSetting] = useState(null);
-  const [language, setLanguage] = useState("English");
+  const [language, setLanguage] = useState("Anglisht");
   const languages = ["Anglisht", "Shqip", "Gjermanisht"];
-  const [theme, setTheme] = useState("Light");
-  const themes = ["", "Dark"];
+  const [theme, setTheme] = useState("Drite");
+  const themes = ["Drite", "Errët"];
 
   const settings = [
     {
@@ -19,18 +19,18 @@ export default function SettingsScreen({ onClose }) {
       value: language,
       type: "button",
     },
-    { id: "2", icon: "moon", label: "Theme", value: theme, type: "button" },
+    { id: "2", icon: "moon", label: "Tema", value: theme, type: "button" },
     {
       id: "3",
       icon: "bell",
-      label: "Notifications",
+      label: "Njoftimet",
       value: notifications,
       type: "switch",
     },
     {
       id: "4",
+      label: "Çkyçu",
       icon: "log-out",
-      label: "Logout",
       type: "button",
       isLogout: true,
     },
@@ -39,7 +39,7 @@ export default function SettingsScreen({ onClose }) {
   const handleSettingPress = (item) => {
     if (item.isLogout) {
       alert("Jeni duke u çkyçur...");
-    } else if (item.label === "Language" || item.label === "Theme") {
+    } else if (item.label === "Gjuha" || item.label === "Tema") {
       setExpandedSetting(expandedSetting === item.id ? null : item.id);
     }
   };

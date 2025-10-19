@@ -62,7 +62,7 @@ export default function SettingItem({
         )}
       </View>
 
-      {expandedSetting === item.id && item.label === "Language" && (
+      {expandedSetting === item.id && item.label === "Gjuha" && (
         <DropdownList
           options={languages}
           selected={language}
@@ -73,7 +73,7 @@ export default function SettingItem({
         />
       )}
 
-      {expandedSetting === item.id && item.label === "Theme" && (
+      {expandedSetting === item.id && item.label === "Tema" && (
         <DropdownList
           options={themes}
           selected={theme}
