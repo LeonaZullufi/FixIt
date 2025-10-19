@@ -1,28 +1,35 @@
 import { Tabs } from "expo-router";
-import { Image, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Image, StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="dark-content" backgroundColor="white" />
+    <>
+      <StatusBar style="light" translucent backgroundColor="transparent" />
       <Tabs
         screenOptions={{
           headerStyle: {
             height: 75,
             backgroundColor: "#023e8a",
-            borderBottomLeftRadius: 90,
-            borderBottomRightRadius: 90,
+            
           },
-
           headerTitleAlign: "center",
           headerTintColor: "white",
+          headerBackground: () => (
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "#023e8a",
+                borderBottomLeftRadius: 90,
+                borderBottomRightRadius: 90,
+              }}
+            />
+          ),
           tabBarActiveTintColor: "#A4FFFF",
           tabBarInactiveTintColor: "white",
           tabBarStyle: {
             backgroundColor: "#023e8a",
-            borderTopWidth: 0.5,
+            borderTopWidth: 0,
             height: 70,
             paddingBottom: 10,
             paddingTop: 10,
@@ -31,6 +38,7 @@ export default function RootLayout() {
           },
         }}
       >
+        {/* Screens */}
         <Tabs.Screen
           name="index"
           options={{
@@ -42,10 +50,7 @@ export default function RootLayout() {
                     ? require("../assets/home-click_icon.png")
                     : require("../assets/home_icon.png")
                 }
-                style={{
-                  width: size * 1.4,
-                  height: size * 1.4,
-                }}
+                style={{ width: size * 1.4, height: size * 1.4 }}
               />
             ),
           }}
@@ -61,10 +66,7 @@ export default function RootLayout() {
                     ? require("../assets/location-click_icon.png")
                     : require("../assets/location_icon.png")
                 }
-                style={{
-                  width: size * 1.4,
-                  height: size * 1.4,
-                }}
+                style={{ width: size * 1.4, height: size * 1.4 }}
               />
             ),
           }}
@@ -80,11 +82,7 @@ export default function RootLayout() {
                     ? require("../assets/FixIt-click.png")
                     : require("../assets/FixIt.png")
                 }
-                style={{
-                  width: 80,
-                  height: 80,
-                  marginBottom: 50,
-                }}
+                style={{ width: 80, height: 80, marginBottom: 50 }}
               />
             ),
           }}
@@ -100,10 +98,7 @@ export default function RootLayout() {
                     ? require("../assets/help-click_icon.png")
                     : require("../assets/help_icon.png")
                 }
-                style={{
-                  width: size * 1.4,
-                  height: size * 1.4,
-                }}
+                style={{ width: size * 1.4, height: size * 1.4 }}
               />
             ),
           }}
@@ -119,22 +114,12 @@ export default function RootLayout() {
                     ? require("../assets/profile-click_icon.png")
                     : require("../assets/profile_icon.png")
                 }
-                style={{
-                  width: size * 1.4,
-                  height: size * 1.4,
-                }}
+                style={{ width: size * 1.4, height: size * 1.4 }}
               />
             ),
           }}
         />
       </Tabs>
-    </SafeAreaView>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});

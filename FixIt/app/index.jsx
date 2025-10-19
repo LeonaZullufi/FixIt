@@ -1,31 +1,39 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import React, { useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import bannerImage from "../assets/explore.png";
 
 const ExploreScreen = () => {
+  const navigation = useNavigation();
+  const lastHeaderState = useRef(true); 
+
+  const handleScroll = (event) => {
+    const currentY = event.nativeEvent.contentOffset.y;
+
+    
+    if (currentY > 50 && lastHeaderState.current) {
+      navigation.setOptions({ headerShown: false });
+      lastHeaderState.current = false;
+    }
+
+   
+    if (currentY < 30 && !lastHeaderState.current) {
+      navigation.setOptions({ headerShown: true });
+      lastHeaderState.current = true;
+    }
+  };
+
   const stats = [
-    {
-      id: 1,
-      label: "Probleme të zgjidhura",
-      value: 124,
-      color: "#27B4E2",
-      emoji: "✅",
-    },
+    { id: 1, label: "Probleme të zgjidhura", value: 124, color: "#27B4E2", emoji: "✅" },
     { id: 2, label: "Në pritje", value: 37, color: "#FF6663", emoji: "🕓" },
-    {
-      id: 3,
-      label: "Në lagjen tënde",
-      value: 12,
-      color: "#003F91",
-      emoji: "📍",
-    },
-    {
-      id: 4,
-      label: "Përdorues aktivë",
-      value: 45,
-      color: "#2D2D2D",
-      emoji: "👥",
-    },
+    { id: 3, label: "Në lagjen tënde", value: 12, color: "#003F91", emoji: "📍" },
+    { id: 4, label: "Përdorues aktivë", value: 45, color: "#2D2D2D", emoji: "👥" },
   ];
 
   const facts = [
@@ -38,7 +46,10 @@ const ExploreScreen = () => {
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       >
+    
         <Image source={bannerImage} style={styles.banner} />
 
         <View style={styles.welcomeContainer}>
@@ -97,7 +108,7 @@ const ExploreScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+
   },
   scrollContent: {
     padding: 16,
@@ -127,6 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    
   },
   card: {
     width: "48%",
@@ -157,7 +169,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     padding: 20,
     borderRadius: 12,
-    backgroundColor: "white",
+    backgroundColor: "#dcdcdcff",
     marginBottom: 20,
   },
   successTitle: {

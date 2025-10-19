@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "expo-router";
 
 export default function ReportScreen() {
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Raporto Problem",
+      headerStyle: {
+        backgroundColor: "#023e8a", 
+      },
+      headerTitleAlign: "center",
+      headerTintColor: "white",
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="light" backgroundColor="#023e8a" />
+
       <Text style={styles.title}>Raporto një problem</Text>
 
       <Image
@@ -35,7 +50,7 @@ export default function ReportScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+   
   },
   title: {
     textAlign: "center",

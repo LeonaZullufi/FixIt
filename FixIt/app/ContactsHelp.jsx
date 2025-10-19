@@ -8,6 +8,7 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native"; // ✅ shtohet kjo
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
 import AboutAppComponent from "../components/contacts/AboutAppComponent";
@@ -16,6 +17,24 @@ import ContactSection from "../components/contacts/ContactSection";
 import AppInfo from "../components/contacts/AppInfo";
 
 export default function ContactScreen() {
+  const navigation = useNavigation();
+  const lastHeaderState = useRef(true); 
+
+  const handleScroll = (event) => {
+    const currentY = event.nativeEvent.contentOffset.y;
+
+    
+    if (currentY > 50 && lastHeaderState.current) {
+      navigation.setOptions({ headerShown: false });
+      lastHeaderState.current = false;
+    }
+
+    if (currentY < 30 && !lastHeaderState.current) {
+      navigation.setOptions({ headerShown: true });
+      lastHeaderState.current = true;
+    }
+  };
+
   const [form, setForm] = useState({
     name: "",
     lastName: "",
@@ -43,6 +62,9 @@ export default function ContactScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         enableResetScrollToCoords={false}
         extraScrollHeight={20}
+        onScroll={handleScroll} 
+        scrollEventThrottle={16} 
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.inner}>
           <View style={styles.header}>
@@ -124,18 +146,15 @@ export default function ContactScreen() {
 }
 
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, backgroundColor: "#fff" },
-
+  mainContainer: { flex: 1},
   contentContainer: {
     flexGrow: 1,
     padding: 20,
   },
-
   inner: {
     flex: 1,
     alignItems: "center",
   },
-
   title: {
     fontSize: 22,
     color: "black",
@@ -148,13 +167,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
-
   header: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
   },
-
   formContainer: {
     width: "100%",
     backgroundColor: "#023e8a",
