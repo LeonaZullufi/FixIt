@@ -7,8 +7,9 @@ import {
   StyleSheet,
   Platform,
   Keyboard,
+  SafeAreaView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // ✅ shtohet kjo
+import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
 import AboutAppComponent from "../components/contacts/AboutAppComponent";
@@ -18,12 +19,11 @@ import AppInfo from "../components/contacts/AppInfo";
 
 export default function ContactScreen() {
   const navigation = useNavigation();
-  const lastHeaderState = useRef(true); 
+  const lastHeaderState = useRef(true);
 
   const handleScroll = (event) => {
     const currentY = event.nativeEvent.contentOffset.y;
 
-    
     if (currentY > 50 && lastHeaderState.current) {
       navigation.setOptions({ headerShown: false });
       lastHeaderState.current = false;
@@ -56,97 +56,102 @@ export default function ContactScreen() {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <KeyboardAwareScrollView
-        style={styles.contentContainer}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        enableResetScrollToCoords={false}
-        extraScrollHeight={20}
-        onScroll={handleScroll} 
-        scrollEventThrottle={16} 
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.inner}>
-          <View style={styles.header}>
-            <Ionicons name="information-circle" size={28} color="#17cbebff" />
-            <Text style={[styles.title, { marginTop: 8 }]}>
-              FixIt – Ndihmë & Udhëzime
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.mainContainer}>
+        <KeyboardAwareScrollView
+          style={styles.contentContainer}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          enableResetScrollToCoords={false}
+          extraScrollHeight={20}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.inner}>
+            <View style={styles.header}>
+              <Ionicons name="information-circle" size={28} color="#17cbebff" />
+              <Text style={[styles.title, { marginTop: 8 }]}>
+                FixIt – Ndihmë & Udhëzime
+              </Text>
+            </View>
+
+            <AppInfo />
+            <AboutAppComponent />
+            <FAQSectionComponent />
+
+            <Text style={[styles.title, { marginTop: 10 }]}>
+              Informacione Kontakti
             </Text>
+            <Text style={styles.subtitle}>
+              Plotësoni formularin dhe ekipi ynë do t’ju kontaktojë brenda 24
+              orëve
+            </Text>
+
+            <View style={styles.formContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Emri"
+                placeholderTextColor="#aaa"
+                value={form.name}
+                onChangeText={(text) => handleChange("name", text)}
+                returnKeyType="next"
+                onSubmitEditing={() => lastNameRef.current?.focus()}
+                scrollEnabled={false}
+              />
+              <TextInput
+                ref={lastNameRef}
+                style={styles.input}
+                placeholder="Mbiemri"
+                placeholderTextColor="#aaa"
+                value={form.lastName}
+                onChangeText={(text) => handleChange("lastName", text)}
+                returnKeyType="next"
+                onSubmitEditing={() => emailRef.current?.focus()}
+                scrollEnabled={false}
+              />
+              <TextInput
+                ref={emailRef}
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#aaa"
+                value={form.email}
+                onChangeText={(text) => handleChange("email", text)}
+                keyboardType="email-address"
+                returnKeyType="next"
+                onSubmitEditing={() => messageRef.current?.focus()}
+                scrollEnabled={false}
+              />
+              <TextInput
+                ref={messageRef}
+                style={[styles.input, styles.textArea]}
+                placeholder="Mesazhi"
+                placeholderTextColor="#aaa"
+                value={form.message}
+                onChangeText={(text) => handleChange("message", text)}
+                multiline
+                numberOfLines={4}
+                returnKeyType="done"
+                scrollEnabled={false}
+              />
+
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Dërgo Mesazhin</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ContactSection />
           </View>
-
-          <AppInfo />
-          <AboutAppComponent />
-          <FAQSectionComponent />
-
-          <Text style={[styles.title, { marginTop: 10 }]}>
-            Informacione Kontakti
-          </Text>
-          <Text style={styles.subtitle}>
-            Plotësoni formularin dhe ekipi ynë do t’ju kontaktojë brenda 24
-            orëve
-          </Text>
-
-          <View style={styles.formContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Emri"
-              placeholderTextColor="#aaa"
-              value={form.name}
-              onChangeText={(text) => handleChange("name", text)}
-              returnKeyType="next"
-              onSubmitEditing={() => lastNameRef.current?.focus()}
-              scrollEnabled={false}
-            />
-            <TextInput
-              ref={lastNameRef}
-              style={styles.input}
-              placeholder="Mbiemri"
-              placeholderTextColor="#aaa"
-              value={form.lastName}
-              onChangeText={(text) => handleChange("lastName", text)}
-              returnKeyType="next"
-              onSubmitEditing={() => emailRef.current?.focus()}
-              scrollEnabled={false}
-            />
-            <TextInput
-              ref={emailRef}
-              style={styles.input}
-              placeholder="Email"
-              placeholderTextColor="#aaa"
-              value={form.email}
-              onChangeText={(text) => handleChange("email", text)}
-              keyboardType="email-address"
-              returnKeyType="next"
-              onSubmitEditing={() => messageRef.current?.focus()}
-              scrollEnabled={false}
-            />
-            <TextInput
-              ref={messageRef}
-              style={[styles.input, styles.textArea]}
-              placeholder="Mesazhi"
-              placeholderTextColor="#aaa"
-              value={form.message}
-              onChangeText={(text) => handleChange("message", text)}
-              multiline
-              numberOfLines={4}
-              returnKeyType="done"
-              scrollEnabled={false}
-            />
-
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Dërgo Mesazhin</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ContactSection />
-        </View>
-      </KeyboardAwareScrollView>
-    </View>
+        </KeyboardAwareScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1},
+  safeArea: { flex: 1
+    
+   },
+  mainContainer: { flex: 1 },
   contentContainer: {
     flexGrow: 1,
     padding: 20,

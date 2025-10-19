@@ -5,24 +5,23 @@ import {
   StyleSheet,
   ScrollView,
   Image,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import bannerImage from "../assets/explore.png";
 
 const ExploreScreen = () => {
   const navigation = useNavigation();
-  const lastHeaderState = useRef(true); 
+  const lastHeaderState = useRef(true);
 
   const handleScroll = (event) => {
     const currentY = event.nativeEvent.contentOffset.y;
 
-    
     if (currentY > 50 && lastHeaderState.current) {
       navigation.setOptions({ headerShown: false });
       lastHeaderState.current = false;
     }
 
-   
     if (currentY < 30 && !lastHeaderState.current) {
       navigation.setOptions({ headerShown: true });
       lastHeaderState.current = true;
@@ -42,73 +41,77 @@ const ExploreScreen = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-      >
-    
-        <Image source={bannerImage} style={styles.banner} />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+        >
+          <Image source={bannerImage} style={styles.banner} />
 
-        <View style={styles.welcomeContainer}>
-          <Text style={styles.welcome}>Mirë se erdhe!</Text>
-        </View>
+          <View style={styles.welcomeContainer}>
+            <Text style={styles.welcome}>Mirë se erdhe!</Text>
+          </View>
 
-        <View style={styles.cardContainer}>
-          {stats.map((item) => (
-            <View
-              key={item.id}
-              style={[styles.card, { backgroundColor: item.color }]}
+          <View style={styles.cardContainer}>
+            {stats.map((item) => (
+              <View
+                key={item.id}
+                style={[styles.card, { backgroundColor: item.color }]}
+              >
+                <Text style={styles.cardTitle}>
+                  {item.emoji} {item.label}
+                </Text>
+                <Text style={styles.cardValue}>{item.value}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.successSection}>
+            <Text style={styles.successTitle}>Sukseset e fundit</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.successScroll}
             >
-              <Text style={styles.cardTitle}>
-                {item.emoji} {item.label}
-              </Text>
-              <Text style={styles.cardValue}>{item.value}</Text>
-            </View>
-          ))}
-        </View>
+              <View style={styles.successCard}>
+                <Text style={styles.successText}>
+                  💡 Drita e rrugës në “Rr. Dëshmorët” është rregulluar
+                </Text>
+              </View>
+              <View style={styles.successCard}>
+                <Text style={styles.successText}>
+                  🚮 Pastrimi i mbeturinave në “Rr. Iliria” u krye
+                </Text>
+              </View>
+              <View style={styles.successCard}>
+                <Text style={styles.successText}>
+                  💧 Uji është rikthyer në “Lagjja Kalabria”
+                </Text>
+              </View>
+            </ScrollView>
+          </View>
 
-        <View style={styles.successSection}>
-          <Text style={styles.successTitle}>Sukseset e fundit</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.successScroll}
-          >
-            <View style={styles.successCard}>
-              <Text style={styles.successText}>
-                💡 Drita e rrugës në “Rr. Dëshmorët” është rregulluar
-              </Text>
-            </View>
-            <View style={styles.successCard}>
-              <Text style={styles.successText}>
-                🚮 Pastrimi i mbeturinave në “Rr. Iliria” u krye
-              </Text>
-            </View>
-            <View style={styles.successCard}>
-              <Text style={styles.successText}>
-                💧 Uji është rikthyer në “Lagjja Kalabria”
-              </Text>
-            </View>
-          </ScrollView>
-        </View>
-        <View style={styles.factBox}>
-          <Text style={styles.factTitle}>Thënie motivuese ose Fun Fact</Text>
-          <Text style={styles.factText}>
-            {facts[Math.floor(Math.random() * facts.length)]}
-          </Text>
-        </View>
-      </ScrollView>
-    </View>
+          <View style={styles.factBox}>
+            <Text style={styles.factTitle}>Thënie motivuese ose Fun Fact</Text>
+            <Text style={styles.factText}>
+              {facts[Math.floor(Math.random() * facts.length)]}
+            </Text>
+          </View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: { 
+    flex: 1
+  },
   container: {
     flex: 1,
-
   },
   scrollContent: {
     padding: 16,
@@ -138,7 +141,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    
   },
   card: {
     width: "48%",
@@ -152,7 +154,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-
   cardTitle: {
     fontSize: 14,
     color: "#fff",
