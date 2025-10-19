@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Platform,
   Keyboard,
+  StatusBar
 
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -18,10 +19,8 @@ import ContactSection from "../components/contacts/ContactSection";
 import AppInfo from "../components/contacts/AppInfo";
 
 export default function ContactScreen() {
-  const navigation = useNavigation();
-  const lastHeaderState = useRef(true);
-
-  const handleScroll = (event) => {
+   const navigation = useNavigation();
+    const lastHeaderState = useRef(true);
   
     const handleScroll = (event) => {
       const currentY = event.nativeEvent.contentOffset.y;
@@ -35,10 +34,9 @@ export default function ContactScreen() {
       if (currentY < 30 && !lastHeaderState.current) {
         navigation.setOptions({ headerShown: true });
         lastHeaderState.current = true;
-        StatusBar.setBarStyle("light-content");
+         StatusBar.setBarStyle("light-content");
       }
     };
-  }
 
   const [form, setForm] = useState({
     name: "",

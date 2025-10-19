@@ -6,16 +6,14 @@ import { StatusBar } from "expo-status-bar";
 export default function RootLayout() {
   return (
     <View style={styles.root}>
-      <StatusBar style="light" translucent={false} backgroundColor="#023e8a" />
+      <StatusBar style="dark"  backgroundColor="#023e8a" />
 
       <SafeAreaView style={styles.safeArea} edges={["left", "right"]}>
         <Tabs
           screenOptions={{
             headerStyle: {
-              statusBarStyle: "light",
-              statusBarColor: "#023e8a",
               height: 75,
-             
+              backgroundColor: "#023e8a",
             },
             headerTitleAlign: "center",
             headerTintColor: "white",

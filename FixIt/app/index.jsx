@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  
   StatusBar
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -15,21 +14,23 @@ const ExploreScreen = () => {
   const navigation = useNavigation();
   const lastHeaderState = useRef(true);
 
-  const handleScroll = (event) => {
-    const currentY = event.nativeEvent.contentOffset.y;
 
-    if (currentY > 50 && lastHeaderState.current) {
-      navigation.setOptions({ headerShown: false });
-      lastHeaderState.current = false;
-      StatusBar.setBarStyle("dark-content");
-    }
+const handleScroll = (event) => {
+  const currentY = event.nativeEvent.contentOffset.y;
 
-    if (currentY < 30 && !lastHeaderState.current) {
-      navigation.setOptions({ headerShown: true });
-      lastHeaderState.current = true;
-       StatusBar.setBarStyle("light-content");
-    }
-  };
+  if (currentY > 50 && lastHeaderState.current) {
+    navigation.setOptions({ headerShown: false });
+    StatusBar.setBarStyle("dark-content"); // shkronja të zeza
+    lastHeaderState.current = false;
+  }
+
+  if (currentY < 30 && !lastHeaderState.current) {
+    navigation.setOptions({ headerShown: true });
+    StatusBar.setBarStyle("light-content"); // shkronja të bardha
+    lastHeaderState.current = true;
+  }
+};
+
 
   const stats = [
     { id: 1, label: "Probleme të zgjidhura", value: 124, color: "#27B4E2", emoji: "✅" },

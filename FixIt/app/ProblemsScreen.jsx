@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal, Text, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Modal, Text, TouchableOpacity, Image} from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const mapStyle = [
@@ -90,8 +90,12 @@ export default function ReportScreen() {
       setRegion(newRegion);
     }
   };
+  
 
   return (
+     
+    
+ 
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
@@ -130,6 +134,7 @@ export default function ReportScreen() {
         </View>
       </Modal>
     </View>
+     
   );
 }
 
