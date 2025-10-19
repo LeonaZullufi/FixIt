@@ -5,7 +5,8 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  SafeAreaView,
+  
+  StatusBar
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import bannerImage from "../assets/explore.png";
@@ -20,11 +21,13 @@ const ExploreScreen = () => {
     if (currentY > 50 && lastHeaderState.current) {
       navigation.setOptions({ headerShown: false });
       lastHeaderState.current = false;
+      StatusBar.setBarStyle("dark-content");
     }
 
     if (currentY < 30 && !lastHeaderState.current) {
       navigation.setOptions({ headerShown: true });
       lastHeaderState.current = true;
+       StatusBar.setBarStyle("light-content");
     }
   };
 
@@ -41,7 +44,7 @@ const ExploreScreen = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+   
       <View style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -102,14 +105,12 @@ const ExploreScreen = () => {
           </View>
         </ScrollView>
       </View>
-    </SafeAreaView>
+    
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: { 
-    flex: 1
-  },
+  
   container: {
     flex: 1,
   },

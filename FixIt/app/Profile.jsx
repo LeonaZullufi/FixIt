@@ -6,7 +6,7 @@ import {
   Modal,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
+
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsCard from "../components/settings/SettingsCard";
@@ -57,7 +57,7 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    
       <View style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -89,14 +89,12 @@ export default function ProfileScreen() {
           </View>
         </Modal>
       </View>
-    </SafeAreaView>
+   
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
+ 
   container: {
     flex: 1,
   },

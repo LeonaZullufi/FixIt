@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Platform,
   Keyboard,
-  SafeAreaView,
+
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -22,18 +22,23 @@ export default function ContactScreen() {
   const lastHeaderState = useRef(true);
 
   const handleScroll = (event) => {
-    const currentY = event.nativeEvent.contentOffset.y;
-
-    if (currentY > 50 && lastHeaderState.current) {
-      navigation.setOptions({ headerShown: false });
-      lastHeaderState.current = false;
-    }
-
-    if (currentY < 30 && !lastHeaderState.current) {
-      navigation.setOptions({ headerShown: true });
-      lastHeaderState.current = true;
-    }
-  };
+  
+    const handleScroll = (event) => {
+      const currentY = event.nativeEvent.contentOffset.y;
+  
+      if (currentY > 50 && lastHeaderState.current) {
+        navigation.setOptions({ headerShown: false });
+        lastHeaderState.current = false;
+        StatusBar.setBarStyle("dark-content");
+      }
+  
+      if (currentY < 30 && !lastHeaderState.current) {
+        navigation.setOptions({ headerShown: true });
+        lastHeaderState.current = true;
+        StatusBar.setBarStyle("light-content");
+      }
+    };
+  }
 
   const [form, setForm] = useState({
     name: "",
@@ -56,7 +61,7 @@ export default function ContactScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    
       <View style={styles.mainContainer}>
         <KeyboardAwareScrollView
           style={styles.contentContainer}
@@ -143,14 +148,12 @@ export default function ContactScreen() {
           </View>
         </KeyboardAwareScrollView>
       </View>
-    </SafeAreaView>
+  
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1
-    
-   },
+  
   mainContainer: { flex: 1 },
   contentContainer: {
     flexGrow: 1,
