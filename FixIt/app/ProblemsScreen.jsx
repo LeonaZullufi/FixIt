@@ -43,18 +43,18 @@ const markers = [
   {
     id: 4,
     title: "Rruga C nuk ka ndriqim - Prishtinë",
-    description: "Mungon ndriqimi ne rrugen C , edhe pse infrastruktura ekziston",
+    description: "Mungon ndriçimi në Rrugën C, edhe pse infrastruktura ekziston",
     latitude: 42.65087,
     longitude: 21.15602,
-    image: require('../assets/ProblemOnMap/Gropa2Prizren.jpg'),
+    image: require('../assets/ProblemOnMap/NdriqimPrishtine.jpg'),
   },
   {
     id: 5,
-    title: "Mbeturina skaj rruges - Skenderaj",
+    title: "Mbeturina anash rruges - Skenderaj",
     description: "Mbeturinat vazhdojnë të mblidhen , askush nuk i largon , kjo vjen nga mungesa e shportave adekuate",
     latitude: 42.74757,
     longitude: 20.78917,
-    image: require('../assets/ProblemOnMap/Gropa2Prizren.jpg'),
+    image: require('../assets/ProblemOnMap/MbeturinaSkenderaj.jpg'),
   },
 ];
 
