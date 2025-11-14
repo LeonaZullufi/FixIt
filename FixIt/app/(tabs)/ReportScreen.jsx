@@ -28,9 +28,9 @@ export default function ReportScreen() {
   const [photoPickerVisible, setPhotoPickerVisible] = useState(false);
 
   const photos = [
-    require("../assets/ProblemOnMap/Gropa1.png"),
-    require("../assets/ProblemOnMap/Gropa2Prizren.jpg"),
-    require("../assets/ProblemOnMap/NdriqimPrishtine.jpg"),
+    require("../../assets/ProblemOnMap/Gropa1.png"),
+    require("../../assets/ProblemOnMap/Gropa2Prizren.jpg"),
+    require("../../assets/ProblemOnMap/NdriqimPrishtine.jpg"),
   ];
 
   useLayoutEffect(() => {

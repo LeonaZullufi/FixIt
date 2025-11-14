@@ -22,7 +22,7 @@ const markers = [
     description: "Grope në rrugën kryesore",
     latitude: 42.6629,
     longitude: 21.1655,
-    image: require('../assets/ProblemOnMap/Gropa1.png'),
+    image: require('../../assets/ProblemOnMap/Gropa1.png'),
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ const markers = [
     description: "Kanalizimi nuk funksionon për të larguar ujin",
     latitude: 42.2139,
     longitude: 20.7417,
-    image: require('../assets/ProblemOnMap/Gropa2Prizren.jpg'),
+    image: require('../../assets/ProblemOnMap/Gropa2Prizren.jpg'),
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ const markers = [
     description: "Uji nga kanalizimi ka kaluar në rrugë",
     latitude: 42.6606,
     longitude: 20.2883,
-    image: require('../assets/ProblemOnMap/KanalizimNeRruge.jpg'),
+    image: require('../../assets/ProblemOnMap/KanalizimNeRruge.jpg'),
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ const markers = [
     description: "Mungon ndriçimi në Rrugën C, edhe pse infrastruktura ekziston",
     latitude: 42.65087,
     longitude: 21.15602,
-    image: require('../assets/ProblemOnMap/NdriqimPrishtine.jpg'),
+    image: require('../../assets/ProblemOnMap/NdriqimPrishtine.jpg'),
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ const markers = [
     description: "Mbeturinat vazhdojnë të mblidhen , askush nuk i largon , kjo vjen nga mungesa e shportave adekuate",
     latitude: 42.74757,
     longitude: 20.78917,
-    image: require('../assets/ProblemOnMap/MbeturinaSkenderaj.jpg'),
+    image: require('../../assets/ProblemOnMap/MbeturinaSkenderaj.jpg'),
   },
   {
     id: 6,
@@ -62,7 +62,7 @@ const markers = [
     description: "Këndi i lojërave në bregun e diellit është pa mirëmbajtje dhe i rrezikshëm",
     latitude: 42.654329,
     longitude: 21.174757,
-    image: require('../assets/ProblemOnMap/KendiLojrave.jpg'),
+    image: require('../../assets/ProblemOnMap/KendiLojrave.jpg'),
   },
 ];
 

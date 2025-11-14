@@ -13,10 +13,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
-import AboutAppComponent from "../components/contacts/AboutAppComponent";
-import FAQSectionComponent from "../components/contacts/FAQSectionComponent";
-import ContactSection from "../components/contacts/ContactSection";
-import AppInfo from "../components/contacts/AppInfo";
+import AboutAppComponent from "../../components/contacts/AboutAppComponent";
+import FAQSectionComponent from "../../components/contacts/FAQSectionComponent";
+import ContactSection from "../../components/contacts/ContactSection";
+import AppInfo from "../../components/contacts/AppInfo";
 
 export default function ContactScreen() {
    const navigation = useNavigation();

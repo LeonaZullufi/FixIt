@@ -8,27 +8,29 @@ import {
   StatusBar
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import bannerImage from "../assets/explore.png";
+import bannerImage from "../../assets/explore.png";
 
 const ExploreScreen = () => {
-  const navigation = useNavigation();
-  const lastHeaderState = useRef(true);
+ 
 
-
-const handleScroll = (event) => {
-  const currentY = event.nativeEvent.contentOffset.y;
-
+    const navigation = useNavigation();
+    const lastHeaderState = useRef(true);
+  
+    const handleScroll = (event) => {
+    const currentY = event.nativeEvent.contentOffset.y;
+  
   if (currentY > 50 && lastHeaderState.current) {
-    navigation.setOptions({ headerShown: false });
-    StatusBar.setBarStyle("dark-content"); // shkronja të zeza
-    lastHeaderState.current = false;
-  }
+  navigation.setOptions({ headerShown: false });
+  lastHeaderState.current = false;
+  StatusBar.setBarStyle("dark-content", true); 
+}
 
-  if (currentY < 30 && !lastHeaderState.current) {
-    navigation.setOptions({ headerShown: true });
-    StatusBar.setBarStyle("light-content"); // shkronja të bardha
-    lastHeaderState.current = true;
-  }
+if (currentY < 30 && !lastHeaderState.current) {
+  navigation.setOptions({ headerShown: true });
+  lastHeaderState.current = true;
+  StatusBar.setBarStyle("light-content", true);
+}
+
 };
 
 
@@ -47,6 +49,7 @@ const handleScroll = (event) => {
   return (
    
       <View style={styles.container}>
+
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}

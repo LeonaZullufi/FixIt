@@ -1,27 +1,23 @@
 {
   "expo": {
     "name": "FixIt",
-    "slug": "FixIt",
-    "version": "1.0.0",
-    "main": "expo-router/entry",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-
-    "ios": {
-      "supportsTablet": true
-    },
+    "slug": "fixit",
+    "scheme": "fixitapp",
+    "plugins": [],
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
+      "package": "com.leonazullufi.fixit"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "ios": {
+      "bundleIdentifier": "com.leonazullufi.fixit",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
-    "plugins": ["expo-router"]
+    "extra": {
+      "eas": {
+        "projectId": "a61a8fa1-2cee-466a-aace-5c250ed50dd3"
+      }
+    },
+    "owner": "leonazullufi"
   }
 }
