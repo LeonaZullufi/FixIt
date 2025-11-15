@@ -1,7 +1,18 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Modal, Text, TouchableOpacity, Image} from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Modal,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../../firebase.js"; // ← Your firebase file
 
+// Map style - hide POI labels
 const mapStyle = [
   {
     featureType: "poi",
@@ -10,64 +21,16 @@ const mapStyle = [
   },
 ];
 
+// Kosovo bounds
 const LATITUDE_MIN = 40.8;
 const LATITUDE_MAX = 44.3;
 const LONGITUDE_MIN = 19.8;
 const LONGITUDE_MAX = 22.8;
 
-const markers = [
-  {
-    id: 1,
-    title: "Rruga e dëmtuar - Prishtinë",
-    description: "Grope në rrugën kryesore",
-    latitude: 42.6629,
-    longitude: 21.1655,
-    image: require('../../assets/ProblemOnMap/Gropa1.png'),
-  },
-  {
-    id: 2,
-    title: "Rruga mbledh ujë - Prizren",
-    description: "Kanalizimi nuk funksionon për të larguar ujin",
-    latitude: 42.2139,
-    longitude: 20.7417,
-    image: require('../../assets/ProblemOnMap/Gropa2Prizren.jpg'),
-  },
-  {
-    id: 3,
-    title: "Ujë në rrugë - Pejë",
-    description: "Uji nga kanalizimi ka kaluar në rrugë",
-    latitude: 42.6606,
-    longitude: 20.2883,
-    image: require('../../assets/ProblemOnMap/KanalizimNeRruge.jpg'),
-  },
-  {
-    id: 4,
-    title: "Rruga C nuk ka ndriqim - Prishtinë",
-    description: "Mungon ndriçimi në Rrugën C, edhe pse infrastruktura ekziston",
-    latitude: 42.65087,
-    longitude: 21.15602,
-    image: require('../../assets/ProblemOnMap/NdriqimPrishtine.jpg'),
-  },
-  {
-    id: 5,
-    title: "Mbeturina anash rruges - Skenderaj",
-    description: "Mbeturinat vazhdojnë të mblidhen , askush nuk i largon , kjo vjen nga mungesa e shportave adekuate",
-    latitude: 42.74757,
-    longitude: 20.78917,
-    image: require('../../assets/ProblemOnMap/MbeturinaSkenderaj.jpg'),
-  },
-  {
-    id: 6,
-    title: "Këndi i lojrave është dëmtuar - Prishtinë",
-    description: "Këndi i lojërave në bregun e diellit është pa mirëmbajtje dhe i rrezikshëm",
-    latitude: 42.654329,
-    longitude: 21.174757,
-    image: require('../../assets/ProblemOnMap/KendiLojrave.jpg'),
-  },
-];
-
 export default function ReportScreen() {
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [region, setRegion] = useState({
     latitude: 42.6,
     longitude: 20.9,
@@ -90,12 +53,39 @@ export default function ReportScreen() {
       setRegion(newRegion);
     }
   };
-  
+
+  // Load reports
+  useEffect(() => {
+    setLoading(true);
+    const q = query(collection(db, "reports"));
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setReports(data);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Firestore error:", error);
+        setLoading(false);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2196F3" />
+        <Text style={{ marginTop: 10 }}>Duke ngarkuar raportet...</Text>
+      </View>
+    );
+  }
 
   return (
-     
-    
- 
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
@@ -104,11 +94,14 @@ export default function ReportScreen() {
         onRegionChangeComplete={onRegionChangeComplete}
         customMapStyle={mapStyle}
       >
-        {markers.map((marker) => (
+        {reports.map((report) => (
           <Marker
-            key={marker.id}
-            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-            onPress={() => setSelectedMarker(marker)}
+            key={report.id}
+            coordinate={{
+              latitude: report.latitude,
+              longitude: report.longitude,
+            }}
+            onPress={() => setSelectedMarker(report)}
           />
         ))}
       </MapView>
@@ -121,9 +114,22 @@ export default function ReportScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{selectedMarker?.title}</Text>
-            <Image source={selectedMarker?.image} style={styles.image} />
-            <Text style={{ marginTop: 10 }}>{selectedMarker?.description}</Text>
+            <Text style={styles.modalTitle}>
+              {selectedMarker?.description?.length > 30
+                ? `${selectedMarker?.description.substring(0, 30)}…`
+                : selectedMarker?.description}
+            </Text>
+
+            <Image
+              source={{ uri: selectedMarker?.photoURL }}
+              style={styles.image}
+              resizeMode="cover"
+            />
+
+            <Text style={{ marginTop: 10, textAlign: "center" }}>
+              {selectedMarker?.description}
+            </Text>
+
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setSelectedMarker(null)}
@@ -134,16 +140,26 @@ export default function ReportScreen() {
         </View>
       </Modal>
     </View>
-     
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  map: { flex: 1 },
+  container: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+    width: "100%",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -151,14 +167,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     borderRadius: 12,
-    width: 350,
-    height: 380,
+    width: 340,
+    maxHeight: 500,
     alignItems: "center",
   },
   modalTitle: {
     fontWeight: "bold",
     fontSize: 18,
     textAlign: "center",
+    marginBottom: 8,
   },
   image: {
     width: 300,
@@ -167,11 +184,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   closeButton: {
-    bottom: 0, 
     backgroundColor: "#2196F3",
     marginTop: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
     borderRadius: 8,
   },
 });
