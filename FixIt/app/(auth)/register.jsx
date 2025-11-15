@@ -6,6 +6,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Image,
   TouchableOpacity,
   Modal,
 } from "react-native";
@@ -73,16 +74,17 @@ const Register = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-  source={require("../../assets/FixIt.png")}
-  style={styles.logo}
-/>
-
+     <View style={styles.container}>
+         <Image
+     source={require("../../assets/FixIt.png")}
+     style={styles.logo}
+   />
+   
       <Text style={styles.title}>Create an account</Text>
 
       <TextInput
         placeholder="Email"
+        placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
@@ -90,6 +92,7 @@ const Register = () => {
       />
       <TextInput
         placeholder="Password"
+        placeholderTextColor="#999"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -97,6 +100,7 @@ const Register = () => {
       />
       <TextInput
         placeholder="Confirm Password"
+        placeholderTextColor="#999"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         style={styles.input}
@@ -133,7 +137,7 @@ const Register = () => {
 export default Register;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20 },
+  container: { flex: 1, justifyContent: "center", padding: 20, },
   title: {
     fontSize: 26,
     fontWeight: "bold",
