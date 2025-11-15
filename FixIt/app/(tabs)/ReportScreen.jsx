@@ -173,6 +173,7 @@ export default function ReportScreen() {
         description: description,
         userEmail: user.email,
         createdAt: Date.now(),
+        finished: false,
       });
 
       setSelectedPhoto(null);
