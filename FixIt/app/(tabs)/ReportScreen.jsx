@@ -28,20 +28,16 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-// ===== Reverse Geocoding pa API KEY (OpenStreetMap) =====
+// ===================== Reverse Geocoding =====================
 async function getAddressFromCoords(lat, lng) {
   try {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=sq`;
-
     const response = await fetch(url, {
       headers: { "User-Agent": "FixItApp/1.0" },
     });
-
     const data = await response.json();
-
     return data.display_name || "Adresë e panjohur";
-  } catch (error) {
-    console.log("Gabim API:", error);
+  } catch {
     return "Adresë e panjohur";
   }
 }
@@ -49,41 +45,41 @@ async function getAddressFromCoords(lat, lng) {
 export default function ReportScreen() {
   const navigation = useNavigation();
 
-  // FORM STATE
+  // ===================== FORM STATE =====================
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [description, setDescription] = useState("");
   const [pinLocation, setPinLocation] = useState(null);
   const [placeName, setPlaceName] = useState("");
 
-  // DATA STATE
+  // ===================== DATA STATE =====================
   const [reports, setReports] = useState([]);
   const [openedReport, setOpenedReport] = useState(null);
 
-  // EDIT STATE
+  // ===================== EDIT STATE =====================
   const [editDescription, setEditDescription] = useState("");
   const [editPhoto, setEditPhoto] = useState(null);
 
-  // UI STATE
+  // ===================== UI STATE =====================
   const [photoPickerVisible, setPhotoPickerVisible] = useState(false);
   const [editPhotoVisible, setEditPhotoVisible] = useState(false);
 
-  // STATUS STATE
   const [loadingReports, setLoadingReports] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
+  // TIMER FOR NOTIFICATIONS
   useEffect(() => {
     if (errorMessage || successMessage) {
       const timer = setTimeout(() => {
         setErrorMessage(null);
         setSuccessMessage(null);
-      }, 5000);
-
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [errorMessage, successMessage]);
 
+  // ===================== LOCAL PHOTOS =====================
   const photos = [
     require("../../assets/ProblemOnMap/Gropa1.png"),
     require("../../assets/ProblemOnMap/Gropa2Prizren.jpg"),
@@ -93,7 +89,16 @@ export default function ReportScreen() {
     require("../../assets/ProblemOnMap/KanalizimNeRruge.jpg"),
   ];
 
-  // HEADER UI
+  const photoNames = [
+    "Gropa1.png",
+    "Gropa2Prizren.jpg",
+    "NdriqimPrishtine.jpg",
+    "MbeturinaSkenderaj.jpg",
+    "KendiLojrave.jpg",
+    "KanalizimNeRruge.jpg",
+  ];
+
+  // ===================== HEADER =====================
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "FixIt",
@@ -103,13 +108,10 @@ export default function ReportScreen() {
     });
   }, []);
 
-  // GET USER REPORTS (Realtime)
+  // ===================== GET USER REPORTS =====================
   useEffect(() => {
     const user = auth.currentUser;
-    if (!user) {
-      setLoadingReports(false);
-      return;
-    }
+    if (!user) return setLoadingReports(false);
 
     const q = query(
       collection(db, "reports"),
@@ -119,15 +121,10 @@ export default function ReportScreen() {
     const unsub = onSnapshot(
       q,
       (snap) => {
-        const items = snap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setReports(items);
+        setReports(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
         setLoadingReports(false);
       },
-      (err) => {
-        console.log(err);
+      () => {
         setErrorMessage("Nuk u lexuan raportet.");
         setLoadingReports(false);
       }
@@ -136,41 +133,33 @@ export default function ReportScreen() {
     return () => unsub();
   }, []);
 
-  // === Kur vendos pika → merr adresën automatikisht ===
+  // ===================== PLACE PIN =====================
   const placePin = async (e) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
     setPinLocation({ latitude, longitude });
-
-    const address = await getAddressFromCoords(latitude, longitude);
-    setPlaceName(address);
+    setPlaceName(await getAddressFromCoords(latitude, longitude));
   };
 
-  // SEND REPORT
+  // ===================== SEND REPORT =====================
   const sendReport = async () => {
     if (!pinLocation || !selectedPhoto || !description.trim()) {
-      setErrorMessage("Plotëso foton, vendin dhe përshkrimin!");
-      return;
+      return setErrorMessage("Plotëso foton, vendin dhe përshkrimin!");
     }
 
     const user = auth.currentUser;
-    if (!user) {
-      setErrorMessage("Duhet të jesh i kyçur!");
-      return;
-    }
+    if (!user) return setErrorMessage("Duhet të jesh i kyçur!");
 
     setLoading(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
 
-    const photoURL = Image.resolveAssetSource(selectedPhoto).uri;
+    const imgName = photoNames[photos.indexOf(selectedPhoto)];
 
     try {
       await addDoc(collection(db, "reports"), {
         latitude: pinLocation.latitude,
         longitude: pinLocation.longitude,
-        placeName: placeName, // ADRESA AUTO
-        photoURL: photoURL,
-        description: description,
+        placeName,
+        photoName: imgName,
+        description,
         userEmail: user.email,
         createdAt: Date.now(),
         finished: false,
@@ -180,58 +169,72 @@ export default function ReportScreen() {
       setDescription("");
       setPinLocation(null);
       setPlaceName("");
-
       setSuccessMessage("Raporti u dërgua me sukses!");
-    } catch (error) {
-      console.log(error);
+    } catch {
       setErrorMessage("Gabim gjatë dërgimit.");
     } finally {
       setLoading(false);
     }
   };
 
-  // DELETE
+  // ===================== DELETE REPORT =====================
   const deleteReport = async (id) => {
     setLoading(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
-
     try {
       await deleteDoc(doc(db, "reports", id));
       setOpenedReport(null);
       setSuccessMessage("Raporti u fshi.");
-    } catch (e) {
+    } catch {
       setErrorMessage("Gabim gjatë fshirjes.");
     } finally {
       setLoading(false);
     }
   };
 
-  // UPDATE
+  // ===================== UPDATE REPORT =====================
   const updateReport = async (id) => {
     setLoading(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
 
-    const finalPhotoURL = editPhoto
-      ? Image.resolveAssetSource(editPhoto).uri
-      : openedReport.photoURL;
+    const finalPhotoName = editPhoto
+      ? photoNames[photos.indexOf(editPhoto)]
+      : openedReport.photoName;
 
     try {
       await updateDoc(doc(db, "reports", id), {
         description: editDescription,
-        photoURL: finalPhotoURL,
+        photoName: finalPhotoName,
       });
 
       setOpenedReport(null);
       setSuccessMessage("Raporti u përditësua.");
-    } catch (e) {
-      setErrorMessage("Gabim gjatë update.");
+    } catch {
+      setErrorMessage("Gabim gjatë përditësimit.");
     } finally {
       setLoading(false);
     }
   };
 
+  // ===================== RETURN PHOTO BY NAME =====================
+  function getPhotoByName(name) {
+    switch (name) {
+      case "Gropa1.png":
+        return require("../../assets/ProblemOnMap/Gropa1.png");
+      case "Gropa2Prizren.jpg":
+        return require("../../assets/ProblemOnMap/Gropa2Prizren.jpg");
+      case "NdriqimPrishtine.jpg":
+        return require("../../assets/ProblemOnMap/NdriqimPrishtine.jpg");
+      case "MbeturinaSkenderaj.jpg":
+        return require("../../assets/ProblemOnMap/MbeturinaSkenderaj.jpg");
+      case "KendiLojrave.jpg":
+        return require("../../assets/ProblemOnMap/KendiLojrave.jpg");
+      case "KanalizimNeRruge.jpg":
+        return require("../../assets/ProblemOnMap/KanalizimNeRruge.jpg");
+      default:
+        return require("../../assets/ProblemOnMap/Gropa1.png");
+    }
+  }
+
+  // ===================== UI =====================
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -241,7 +244,6 @@ export default function ReportScreen() {
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 150 }}
-        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.container}>
           <Text style={styles.title}>Raporto një problem</Text>
@@ -255,7 +257,6 @@ export default function ReportScreen() {
           )}
 
           {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-
           {successMessage && (
             <Text style={styles.successText}>{successMessage}</Text>
           )}
@@ -306,9 +307,9 @@ export default function ReportScreen() {
             multiline
           />
 
-          {/* ADRESA AUTO */}
+          {/* ADDRESS */}
           {placeName !== "" && (
-            <Text style={styles.autoAddress}>📍 Adresa: {placeName}</Text>
+            <Text style={styles.autoAddress}>📍 {placeName}</Text>
           )}
 
           {/* SEND */}
@@ -350,13 +351,13 @@ export default function ReportScreen() {
             </View>
           </Modal>
 
-          {/* REPORT MODAL */}
+          {/* DETAILS MODAL */}
           <Modal visible={openedReport !== null} animationType="slide">
             {openedReport && (
               <ScrollView contentContainerStyle={styles.modalScroll}>
                 <View style={styles.modalContent}>
                   <Image
-                    source={{ uri: openedReport.photoURL }}
+                    source={getPhotoByName(openedReport.photoName)}
                     style={styles.modalImage}
                   />
 
@@ -374,11 +375,9 @@ export default function ReportScreen() {
                     style={styles.editInput}
                     value={editDescription}
                     onChangeText={setEditDescription}
-                    placeholder="Ndrysho përshkrimin..."
                     multiline
                   />
 
-                  {/* CHANGE PHOTO */}
                   <TouchableOpacity
                     style={styles.updateButton}
                     onPress={() => setEditPhotoVisible(true)}
@@ -386,7 +385,6 @@ export default function ReportScreen() {
                     <Text style={styles.updateText}>Ndrysho Fotën</Text>
                   </TouchableOpacity>
 
-                  {/* SAVE */}
                   <TouchableOpacity
                     style={styles.updateButton}
                     onPress={() => updateReport(openedReport.id)}
@@ -394,7 +392,6 @@ export default function ReportScreen() {
                     <Text style={styles.updateText}>Ruaj Ndryshimet</Text>
                   </TouchableOpacity>
 
-                  {/* DELETE */}
                   <TouchableOpacity
                     style={styles.deleteButton}
                     onPress={() => deleteReport(openedReport.id)}
@@ -402,7 +399,6 @@ export default function ReportScreen() {
                     <Text style={styles.deleteText}>Fshi Raportin</Text>
                   </TouchableOpacity>
 
-                  {/* CLOSE */}
                   <TouchableOpacity
                     style={styles.closeButton}
                     onPress={() => setOpenedReport(null)}
@@ -447,7 +443,7 @@ export default function ReportScreen() {
   );
 }
 
-// ================== STYLES =====================
+// ===================== STYLES =====================
 const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: 45 },
   title: {
@@ -456,25 +452,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#023e8a",
   },
-
   statusRow: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
   },
-
   loadingText: { marginLeft: 8, color: "#0077b6" },
   errorText: { textAlign: "center", color: "red", marginTop: 10 },
   successText: { textAlign: "center", color: "green", marginTop: 10 },
-
   map: {
     height: 300,
     width: "100%",
     marginTop: 10,
     borderRadius: 10,
   },
-
   photoButton: {
     backgroundColor: "#A4FFFF",
     marginTop: 20,
@@ -483,7 +475,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   photoText: { textAlign: "center", color: "#023e8a" },
-
   input: {
     borderWidth: 1,
     borderColor: "#aaa",
@@ -493,7 +484,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "white",
   },
-
   autoAddress: {
     textAlign: "center",
     marginTop: 10,
@@ -501,23 +491,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingHorizontal: 20,
   },
-
   sendButton: {
     backgroundColor: "#00b4d8",
     marginHorizontal: 50,
     padding: 15,
     borderRadius: 20,
   },
-
   sendText: { textAlign: "center", color: "white", fontSize: 18 },
-
   photoModal: {
     backgroundColor: "white",
     marginTop: "40%",
     padding: 20,
     borderRadius: 20,
   },
-
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -525,30 +511,24 @@ const styles = StyleSheet.create({
     color: "#023e8a",
     marginBottom: 20,
   },
-
   horizontalThumb: {
     width: 120,
     height: 120,
     borderRadius: 15,
     marginRight: 15,
   },
-
   modalScroll: { paddingBottom: 80 },
-
   modalContent: { padding: 20 },
-
   modalImage: {
     width: "100%",
     height: 300,
     borderRadius: 15,
   },
-
   infoText: {
     marginTop: 7,
     fontSize: 14,
     color: "gray",
   },
-
   editInput: {
     borderWidth: 1,
     borderColor: "#aaa",
@@ -556,39 +536,25 @@ const styles = StyleSheet.create({
     marginTop: 15,
     padding: 10,
   },
-
   updateButton: {
     backgroundColor: "#0077b6",
     padding: 12,
     borderRadius: 10,
     marginTop: 20,
   },
-
-  updateText: {
-    color: "white",
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-
+  updateText: { color: "white", textAlign: "center", fontWeight: "bold" },
   deleteButton: {
     backgroundColor: "#d00000",
     padding: 12,
     borderRadius: 10,
     marginTop: 10,
   },
-
-  deleteText: {
-    color: "white",
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-
+  deleteText: { color: "white", textAlign: "center", fontWeight: "bold" },
   closeButton: {
     backgroundColor: "#023e8a",
     padding: 12,
     borderRadius: 10,
     marginTop: 20,
   },
-
   closeText: { color: "white", textAlign: "center" },
 });

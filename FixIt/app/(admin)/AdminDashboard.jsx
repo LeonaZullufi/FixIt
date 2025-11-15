@@ -60,7 +60,7 @@ export default function AdminDashboard() {
     return () => unsub();
   }, []);
 
-  // ============================ Toggle Finished ============================
+  // ============================ TOGGLE FINISHED ============================
   const toggleFinished = async (report) => {
     try {
       await updateDoc(doc(db, "reports", report.id), {
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // ============================ DELETE REPORT ============================
+  // ============================ DELETE ============================
   const deleteReport = async (reportId) => {
     try {
       await deleteDoc(doc(db, "reports", reportId));
@@ -80,6 +80,26 @@ export default function AdminDashboard() {
       console.log("Delete error:", err);
     }
   };
+
+  // ============================ MAP PHOTO NAME → FILE ============================
+  function getPhotoByName(name) {
+    switch (name) {
+      case "Gropa1.png":
+        return require("../../assets/ProblemOnMap/Gropa1.png");
+      case "Gropa2Prizren.jpg":
+        return require("../../assets/ProblemOnMap/Gropa2Prizren.jpg");
+      case "NdriqimPrishtine.jpg":
+        return require("../../assets/ProblemOnMap/NdriqimPrishtine.jpg");
+      case "MbeturinaSkenderaj.jpg":
+        return require("../../assets/ProblemOnMap/MbeturinaSkenderaj.jpg");
+      case "KendiLojrave.jpg":
+        return require("../../assets/ProblemOnMap/KendiLojrave.jpg");
+      case "KanalizimNeRruge.jpg":
+        return require("../../assets/ProblemOnMap/KanalizimNeRruge.jpg");
+      default:
+        return require("../../assets/ProblemOnMap/Gropa1.png");
+    }
+  }
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
@@ -121,7 +141,7 @@ export default function AdminDashboard() {
           <Text style={styles.logoutText}>Çkyçu</Text>
         </TouchableOpacity>
 
-        {/* ======================= FOOTER NORMAL ======================= */}
+        {/* ======================= FOOTER ======================= */}
         <Text style={styles.footer}>
           Developed by Florida, Leona, Albison, Ali © 2025
         </Text>
@@ -132,7 +152,7 @@ export default function AdminDashboard() {
         {opened && (
           <ScrollView contentContainerStyle={{ padding: 20 }}>
             <Image
-              source={{ uri: opened.photoURL }}
+              source={getPhotoByName(opened.photoName)}
               style={{ height: 300, width: "100%", borderRadius: 10 }}
             />
 
@@ -174,6 +194,7 @@ export default function AdminDashboard() {
   );
 }
 
+// ================================= STYLES =================================
 const styles = StyleSheet.create({
   title: { fontSize: 26, fontWeight: "bold", marginBottom: 20 },
 
