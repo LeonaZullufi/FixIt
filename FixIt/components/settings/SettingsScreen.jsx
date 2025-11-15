@@ -2,34 +2,43 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import SettingsList from "./SettingsList";
+import { useRouter } from "expo-router";
 
 export default function SettingsScreen({ onClose }) {
   const [notifications, setNotifications] = useState(true);
   const [expandedSetting, setExpandedSetting] = useState(null);
   const [language, setLanguage] = useState("Anglisht");
-  const languages = ["Anglisht", "Shqip", "Gjermanisht"];
+  const languages = ["Anglisht", "Shqip"];
   const [theme, setTheme] = useState("Drite");
   const themes = ["Drite", "Errët"];
+  const router = useRouter();
 
   const settings = [
     {
       id: "1",
+      label: "Edit Profile",
+      icon: "edit-3",
+      type: "button",
+      isProfile: true,
+    },
+    {
+      id: "2",
       icon: "globe",
       label: "Gjuha",
       value: language,
       type: "button",
     },
-    { id: "2", icon: "moon", label: "Tema", value: theme, type: "button" },
+    { id: "3", icon: "moon", label: "Tema", value: theme, type: "button" },
     {
-      id: "3",
+      id: "4",
       icon: "bell",
       label: "Njoftimet",
       value: notifications,
       type: "switch",
     },
     {
-      id: "4",
-      label: "Çkyçu",
+      id: "5",
+      label: "Dil",
       icon: "log-out",
       type: "button",
       isLogout: true,
@@ -41,6 +50,9 @@ export default function SettingsScreen({ onClose }) {
       alert("Jeni duke u çkyçur...");
     } else if (item.label === "Gjuha" || item.label === "Tema") {
       setExpandedSetting(expandedSetting === item.id ? null : item.id);
+    } else if (item.isProfile) {
+      onClose();
+      router.push("/editProfile");
     }
   };
 

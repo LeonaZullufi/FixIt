@@ -5,10 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   Keyboard,
-  StatusBar
-
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -19,24 +17,24 @@ import ContactSection from "../../components/contacts/ContactSection";
 import AppInfo from "../../components/contacts/AppInfo";
 
 export default function ContactScreen() {
-   const navigation = useNavigation();
-    const lastHeaderState = useRef(true);
-  
-    const handleScroll = (event) => {
-      const currentY = event.nativeEvent.contentOffset.y;
-  
-      if (currentY > 50 && lastHeaderState.current) {
-        navigation.setOptions({ headerShown: false });
-        lastHeaderState.current = false;
-        StatusBar.setBarStyle("dark-content");
-      }
-  
-      if (currentY < 30 && !lastHeaderState.current) {
-        navigation.setOptions({ headerShown: true });
-        lastHeaderState.current = true;
-         StatusBar.setBarStyle("light-content");
-      }
-    };
+  const navigation = useNavigation();
+  const lastHeaderState = useRef(true);
+
+  const handleScroll = (event) => {
+    const currentY = event.nativeEvent.contentOffset.y;
+
+    if (currentY > 50 && lastHeaderState.current) {
+      navigation.setOptions({ headerShown: false });
+      lastHeaderState.current = false;
+      StatusBar.setBarStyle("dark-content");
+    }
+
+    if (currentY < 30 && !lastHeaderState.current) {
+      navigation.setOptions({ headerShown: true });
+      lastHeaderState.current = true;
+      StatusBar.setBarStyle("light-content");
+    }
+  };
 
   const [form, setForm] = useState({
     name: "",
@@ -45,113 +43,134 @@ export default function ContactScreen() {
     message: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const messageRef = useRef(null);
 
   const handleChange = (field, value) => setForm({ ...form, [field]: value });
 
+  const validateForm = () => {
+    let newErrors = {};
+
+    const nameRegex = /^[A-Za-zÀ-ž\s]+$/;
+
+    if (form.message.trim().length < 6)
+      newErrors.message = "Mesazhi duhet të ketë të paktën 6 karaktere.";
+
+    setErrors(newErrors);
+
+    return newErrors;
+  };
+
   const handleSubmit = () => {
-    console.log("Të dhënat e formularit:", form);
+    const validationErrors = validateForm();
+
+    if (Object.keys(validationErrors).length > 0) {
+      let msg = "Ju lutem korrigjoni këtë gabim:\n\n";
+
+      if (validationErrors.message) msg += `• ${validationErrors.message}\n`;
+
+      alert(msg);
+      return;
+    }
+
     alert("Mesazhi juaj u dërgua me sukses!");
     setForm({ name: "", lastName: "", email: "", message: "" });
+    setErrors({});
     Keyboard.dismiss();
   };
 
   return (
-    
-      <View style={styles.mainContainer}>
-        <KeyboardAwareScrollView
-          style={styles.contentContainer}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          enableResetScrollToCoords={false}
-          extraScrollHeight={20}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.inner}>
-            <View style={styles.header}>
-              <Ionicons name="information-circle" size={28} color="#17cbebff" />
-              <Text style={[styles.title, { marginTop: 8 }]}>
-                FixIt – Ndihmë & Udhëzime
-              </Text>
-            </View>
-
-            <AppInfo />
-            <AboutAppComponent />
-            <FAQSectionComponent />
-
-            <Text style={[styles.title, { marginTop: 10 }]}>
-              Informacione Kontakti
+    <View style={styles.mainContainer}>
+      <KeyboardAwareScrollView
+        style={styles.contentContainer}
+        enableResetScrollToCoords={false}
+        extraScrollHeight={20}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.inner}>
+          <View style={styles.header}>
+            <Ionicons name="information-circle" size={28} color="#17cbebff" />
+            <Text style={[styles.title, { marginTop: 8 }]}>
+              FixIt – Ndihmë & Udhëzime
             </Text>
-            <Text style={styles.subtitle}>
-              Plotësoni formularin dhe ekipi ynë do t’ju kontaktojë brenda 24
-              orëve
-            </Text>
-
-            <View style={styles.formContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Emri"
-                placeholderTextColor="#aaa"
-                value={form.name}
-                onChangeText={(text) => handleChange("name", text)}
-                returnKeyType="next"
-                onSubmitEditing={() => lastNameRef.current?.focus()}
-                scrollEnabled={false}
-              />
-              <TextInput
-                ref={lastNameRef}
-                style={styles.input}
-                placeholder="Mbiemri"
-                placeholderTextColor="#aaa"
-                value={form.lastName}
-                onChangeText={(text) => handleChange("lastName", text)}
-                returnKeyType="next"
-                onSubmitEditing={() => emailRef.current?.focus()}
-                scrollEnabled={false}
-              />
-              <TextInput
-                ref={emailRef}
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#aaa"
-                value={form.email}
-                onChangeText={(text) => handleChange("email", text)}
-                keyboardType="email-address"
-                returnKeyType="next"
-                onSubmitEditing={() => messageRef.current?.focus()}
-                scrollEnabled={false}
-              />
-              <TextInput
-                ref={messageRef}
-                style={[styles.input, styles.textArea]}
-                placeholder="Mesazhi"
-                placeholderTextColor="#aaa"
-                value={form.message}
-                onChangeText={(text) => handleChange("message", text)}
-                multiline
-                numberOfLines={4}
-                returnKeyType="done"
-                scrollEnabled={false}
-              />
-
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Dërgo Mesazhin</Text>
-              </TouchableOpacity>
-            </View>
-
-            <ContactSection />
           </View>
-        </KeyboardAwareScrollView>
-      </View>
-  
+
+          <AppInfo />
+          <AboutAppComponent />
+          <FAQSectionComponent />
+
+          <Text style={[styles.title, { marginTop: 10 }]}>
+            Informacione Kontakti
+          </Text>
+          <Text style={styles.subtitle}>
+            Plotësoni formularin dhe ekipi ynë do t’ju kontaktojë brenda 24
+            orëve
+          </Text>
+
+          <View style={styles.formContainer}>
+            <TextInput
+              style={[styles.input, errors.name && styles.errorInput]}
+              placeholder="Emri"
+              placeholderTextColor="#aaa"
+              value={form.name}
+              onChangeText={(text) => handleChange("name", text)}
+              onSubmitEditing={() => lastNameRef.current?.focus()}
+            />
+
+            <TextInput
+              ref={lastNameRef}
+              style={[styles.input, errors.lastName && styles.errorInput]}
+              placeholder="Mbiemri"
+              placeholderTextColor="#aaa"
+              value={form.lastName}
+              onChangeText={(text) => handleChange("lastName", text)}
+              onSubmitEditing={() => emailRef.current?.focus()}
+            />
+
+            <TextInput
+              ref={emailRef}
+              style={[styles.input, errors.email && styles.errorInput]}
+              placeholder="Email"
+              placeholderTextColor="#aaa"
+              value={form.email}
+              onChangeText={(text) => handleChange("email", text)}
+              keyboardType="email-address"
+              onSubmitEditing={() => messageRef.current?.focus()}
+            />
+
+            <TextInput
+              ref={messageRef}
+              style={[
+                styles.input,
+                styles.textArea,
+                errors.message && styles.errorInput,
+              ]}
+              placeholder="Mesazhi (min. 6 karaktere)"
+              placeholderTextColor="#aaa"
+              value={form.message}
+              onChangeText={(text) => handleChange("message", text)}
+              multiline
+              numberOfLines={4}
+            />
+
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Dërgo Mesazhin</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ContactSection />
+        </View>
+      </KeyboardAwareScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  
   mainContainer: { flex: 1 },
   contentContainer: {
     flexGrow: 1,
@@ -180,7 +199,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: "100%",
-    backgroundColor: "#023e8a",
+    backgroundColor: "#ced4da",
     padding: 20,
     borderRadius: 15,
     marginBottom: 20,
@@ -196,11 +215,15 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   button: {
-    backgroundColor: "#FF5E5E",
+    backgroundColor: "#023e8a",
     padding: 12,
     borderRadius: 10,
     alignItems: "center",
     marginTop: 10,
   },
   buttonText: { color: "#fff", fontWeight: "bold" },
+  errorInput: {
+    borderWidth: 2,
+    borderColor: "red",
+  },
 });

@@ -1,11 +1,6 @@
 // app/(tabs)/_layout.jsx
 import React, { useEffect, useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  View,
-  ActivityIndicator,
-} from "react-native";
+import { Image, StyleSheet, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Tabs, useRouter } from "expo-router";
@@ -42,7 +37,7 @@ export default function RootLayout() {
 
   return (
     <View style={styles.root}>
-      <StatusBar style="light" backgroundColor="#023e8a" />
+      <StatusBar style="dark" backgroundColor="#023e8a" />
 
       <SafeAreaView style={styles.safeArea} edges={["left", "right"]}>
         <Tabs
@@ -152,6 +147,13 @@ export default function RootLayout() {
                   style={{ width: size * 1.4, height: size * 1.4 }}
                 />
               ),
+            }}
+          />
+          <Tabs.Screen
+            name="editProfile"
+            options={{
+              href: null,
+              title: "Profil",
             }}
           />
         </Tabs>
