@@ -1,12 +1,48 @@
-import { Tabs } from "expo-router";
-import { Image, StyleSheet, View } from "react-native";
+// app/(tabs)/_layout.jsx
+import React, { useEffect, useState } from "react";
+import {
+  Image,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { Tabs, useRouter } from "expo-router";
+
+import { auth, onAuthStateChanged } from "../../firebase"; // nese path s'punon, provo ../firebase
 
 export default function RootLayout() {
+  const router = useRouter();
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // s'ka user → shko direkt te login
+        router.replace("/(auth)/login");
+      } else {
+        // ka user → vazhdo normal me tabs
+        setCheckingAuth(false);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // derisa po kontrollon auth-in, shfaq loader
+  if (checkingAuth) {
+    return (
+      <View style={styles.loadingContainer}>
+        <StatusBar style="light" backgroundColor="#023e8a" />
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.root}>
-      <StatusBar style="light"  backgroundColor="#023e8a" />
+      <StatusBar style="light" backgroundColor="#023e8a" />
 
       <SafeAreaView style={styles.safeArea} edges={["left", "right"]}>
         <Tabs
@@ -132,5 +168,11 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#023e8a",
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#023e8a",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
