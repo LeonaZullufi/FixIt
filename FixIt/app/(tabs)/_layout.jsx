@@ -1,9 +1,40 @@
-import { Tabs } from "expo-router";
-import { Image, StyleSheet, View } from "react-native";
+// app/(tabs)/_layout.jsx
+import React, { useEffect, useState } from "react";
+import { Image, StyleSheet, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { Tabs, useRouter } from "expo-router";
+
+import { auth, onAuthStateChanged } from "../../firebase"; // nese path s'punon, provo ../firebase
 
 export default function RootLayout() {
+  const router = useRouter();
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // s'ka user → shko direkt te login
+        router.replace("/(auth)/login");
+      } else {
+        // ka user → vazhdo normal me tabs
+        setCheckingAuth(false);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // derisa po kontrollon auth-in, shfaq loader
+  if (checkingAuth) {
+    return (
+      <View style={styles.loadingContainer}>
+        <StatusBar style="light" backgroundColor="#023e8a" />
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.root}>
       <StatusBar style="dark" backgroundColor="#023e8a" />
@@ -46,8 +77,8 @@ export default function RootLayout() {
                 <Image
                   source={
                     focused
-                      ? require("../assets/home-click_icon.png")
-                      : require("../assets/home_icon.png")
+                      ? require("../../assets/home-click_icon.png")
+                      : require("../../assets/home_icon.png")
                   }
                   style={{ width: size * 1.4, height: size * 1.4 }}
                 />
@@ -62,8 +93,8 @@ export default function RootLayout() {
                 <Image
                   source={
                     focused
-                      ? require("../assets/location-click_icon.png")
-                      : require("../assets/location_icon.png")
+                      ? require("../../assets/location-click_icon.png")
+                      : require("../../assets/location_icon.png")
                   }
                   style={{ width: size * 1.4, height: size * 1.4 }}
                 />
@@ -78,8 +109,8 @@ export default function RootLayout() {
                 <Image
                   source={
                     focused
-                      ? require("../assets/FixIt-click.png")
-                      : require("../assets/FixIt.png")
+                      ? require("../../assets/FixIt-click.png")
+                      : require("../../assets/FixIt.png")
                   }
                   style={{ width: 80, height: 80, marginBottom: 50 }}
                 />
@@ -94,8 +125,8 @@ export default function RootLayout() {
                 <Image
                   source={
                     focused
-                      ? require("../assets/help-click_icon.png")
-                      : require("../assets/help_icon.png")
+                      ? require("../../assets/help-click_icon.png")
+                      : require("../../assets/help_icon.png")
                   }
                   style={{ width: size * 1.4, height: size * 1.4 }}
                 />
@@ -110,8 +141,8 @@ export default function RootLayout() {
                 <Image
                   source={
                     focused
-                      ? require("../assets/profile-click_icon.png")
-                      : require("../assets/profile_icon.png")
+                      ? require("../../assets/profile-click_icon.png")
+                      : require("../../assets/profile_icon.png")
                   }
                   style={{ width: size * 1.4, height: size * 1.4 }}
                 />
@@ -139,5 +170,11 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#023e8a",
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#023e8a",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
