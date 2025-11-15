@@ -10,9 +10,8 @@ import {
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { collection, onSnapshot, query } from "firebase/firestore";
-import { db } from "../../firebase.js"; // ← Your firebase file
+import { db } from "../../firebase.js";
 
-// Map style - hide POI labels
 const mapStyle = [
   {
     featureType: "poi",
@@ -21,11 +20,21 @@ const mapStyle = [
   },
 ];
 
-// Kosovo bounds
 const LATITUDE_MIN = 40.8;
 const LATITUDE_MAX = 44.3;
 const LONGITUDE_MIN = 19.8;
 const LONGITUDE_MAX = 22.8;
+
+const imageMap = {
+  "Gropa1.png": require("../../assets/ProblemOnMap/Gropa1.png"),
+  "Gropa2Prizren.jpg": require("../../assets/ProblemOnMap/Gropa2Prizren.jpg"),
+  "KanalizimNeRruge.jpg": require("../../assets/ProblemOnMap/KanalizimNeRruge.jpg"),
+  "KendiLojrave.jpg": require("../../assets/ProblemOnMap/KendiLojrave.jpg"),
+  "MbeturinaSkenderaj.jpg": require("../../assets/ProblemOnMap/MbeturinaSkenderaj.jpg"),
+  "NdriqimPrishtine.jpg": require("../../assets/ProblemOnMap/NdriqimPrishtine.jpg"),
+
+
+};
 
 export default function ReportScreen() {
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -54,7 +63,6 @@ export default function ReportScreen() {
     }
   };
 
-  // Load reports
   useEffect(() => {
     setLoading(true);
     const q = query(collection(db, "reports"));
@@ -84,6 +92,10 @@ export default function ReportScreen() {
       </View>
     );
   }
+
+  const photoSource = selectedMarker?.photoName
+    ? imageMap[selectedMarker.photoName]
+    : null;
 
   return (
     <View style={styles.container}>
@@ -116,15 +128,21 @@ export default function ReportScreen() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>
               {selectedMarker?.description?.length > 30
-                ? `${selectedMarker?.description.substring(0, 30)}…`
+                ? `${selectedMarker?.description.substring(0, 30)}...`
                 : selectedMarker?.description}
             </Text>
 
-            <Image
-              source={{ uri: selectedMarker?.photoURL }}
-              style={styles.image}
-              resizeMode="cover"
-            />
+            {photoSource ? (
+              <Image
+                source={photoSource}
+                style={styles.image}
+                resizeMode="cover"
+              />
+            ) : (
+              <View style={[styles.image, { backgroundColor: "#eee" }]}>
+                <Text style={{ color: "#999" }}>No photo</Text>
+              </View>
+            )}
 
             <Text style={{ marginTop: 10, textAlign: "center" }}>
               {selectedMarker?.description}
@@ -143,7 +161,6 @@ export default function ReportScreen() {
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
