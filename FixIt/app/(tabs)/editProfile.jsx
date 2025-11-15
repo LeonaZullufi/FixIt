@@ -91,7 +91,7 @@ export default function EditProfile() {
         <TouchableOpacity onPress={() => router.replace("/Profile")}>
           <Ionicons name="chevron-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.title}>Edit Profil</Text>
+        <Text style={styles.title}>Edit Profile</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -174,13 +174,13 @@ export default function EditProfile() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: "#f2f2f2" },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#f2f2f2",
     borderBottomColor: "#eee",
   },
   title: { fontSize: 20, fontWeight: "bold" },

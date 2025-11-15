@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import SettingsList from "./SettingsList";
 import { useRouter } from "expo-router";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 export default function SettingsScreen({ onClose }) {
   const [notifications, setNotifications] = useState(true);
@@ -47,8 +49,18 @@ export default function SettingsScreen({ onClose }) {
 
   const handleSettingPress = (item) => {
     if (item.isLogout) {
-      alert("Jeni duke u çkyçur...");
-    } else if (item.label === "Gjuha" || item.label === "Tema") {
+      signOut(auth)
+        .then(() => {
+          onClose();
+          router.replace("/(auth)/login");
+        })
+        .catch((error) => {
+          console.log("❌ Error gjatë çkyçjes:", error);
+        });
+      return;
+    }
+
+    if (item.label === "Gjuha" || item.label === "Tema") {
       setExpandedSetting(expandedSetting === item.id ? null : item.id);
     } else if (item.isProfile) {
       onClose();

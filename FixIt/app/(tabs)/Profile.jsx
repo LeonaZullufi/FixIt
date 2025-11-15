@@ -12,10 +12,14 @@ import { Ionicons } from "@expo/vector-icons";
 import SettingsCard from "../../components/settings/SettingsCard";
 import SettingsScreen from "../../components/settings/SettingsScreen";
 import { useNavigation } from "expo-router";
+import { auth } from "../../firebase";
+import { useEffect } from "react";
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -36,6 +40,15 @@ export default function ProfileScreen() {
       headerTintColor: "white",
     });
   }, [navigation]);
+
+  useEffect(() => {
+    const user = auth.currentUser;
+
+    if (user) {
+      setEmail(user.email);
+      setName(user.displayName ?? "Pa emër");
+    }
+  }, []);
 
   const stats = [
     {
@@ -65,8 +78,8 @@ export default function ProfileScreen() {
         >
           <View style={styles.profileContainer}>
             <Ionicons name="person-circle-outline" size={90} color="#023e8a" />
-            <Text style={styles.name}>Emri Mbiemri</Text>
-            <Text style={styles.email}>email@shembull.com</Text>
+            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.email}>{email}</Text>
           </View>
 
           <View style={styles.statsContainer}>
