@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithCredential,
+  signInWithPopup,
 } from "firebase/auth";
 
 import { auth } from "../../firebase";
@@ -21,10 +23,9 @@ import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
 
-
 WebBrowser.maybeCompleteAuthSession();
 
-// ⚠️ WEB CLIENT ID nga Google → "Web client (auto created by Google Service)"
+// WEB CLIENT ID nga Google Cloud (Web application OAuth client)
 const WEB_CLIENT_ID =
   "483051599257-96qp4md9nulbifqt7l0iedv0qf31ebt4.apps.googleusercontent.com";
 
@@ -34,15 +35,15 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
- const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-  clientId: WEB_CLIENT_ID,
-  redirectUri: AuthSession.makeRedirectUri({
-    useProxy: true,
-  }),
-});
+  // ⬇️ HAPI I RËNDËSISHËM: hook-u BRENDA komponentit
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: WEB_CLIENT_ID,
+    redirectUri: AuthSession.makeRedirectUri({
+      useProxy: true,
+    }),
+  });
 
-
-  // MORE SAFE GOOGLE LOGIN HANDLING
+  // 🎯 handle Google response për ANDROID / iOS (expo-auth-session)
   useEffect(() => {
     const handleGoogleLogin = async () => {
       if (response?.type !== "success") return;
@@ -52,7 +53,6 @@ const Login = () => {
         const { id_token } = response.params;
         const credential = GoogleAuthProvider.credential(id_token);
         await signInWithCredential(auth, credential);
-
         router.replace("/");
       } catch (err) {
         console.log("Google login error:", err);
@@ -65,7 +65,7 @@ const Login = () => {
     handleGoogleLogin();
   }, [response]);
 
-  // EMAIL LOGIN
+  // 📧 Login me email/password
   const handleEmailLogin = async () => {
     setError("");
 
@@ -86,12 +86,37 @@ const Login = () => {
     }
   };
 
+  // 🔐 Login me Google – WEB vs MOBILE
+  const handleGoogleLoginPress = async () => {
+    setError("");
+
+    try {
+      setLoading(true);
+
+      if (Platform.OS === "web") {
+        // WEB: Firebase signInWithPopup
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+        router.replace("/");
+      } else {
+        // MOBILE (Android/iOS): expo-auth-session
+        await promptAsync();
+        // përgjigjen e trajton useEffect më lart
+      }
+    } catch (err) {
+      console.log("Google login error:", err);
+      setError("Gabim gjatë kyçjes me Google.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image
-  source={require("../../assets/FixIt.png")}
-  style={styles.logo}
-/>
+        source={require("../../assets/FixIt.png")}
+        style={styles.logo}
+      />
 
       <Text style={styles.title}>Kyçu</Text>
 
@@ -132,8 +157,8 @@ const Login = () => {
 
       <TouchableOpacity
         style={styles.googleBtn}
-        onPress={() => promptAsync()}
-        disabled={!request || loading}
+        onPress={handleGoogleLoginPress}
+        disabled={loading}
       >
         <Image
           source={{
@@ -154,24 +179,78 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-
-  container: { flex: 1, backgroundColor: "#fff", justifyContent: "center", paddingHorizontal: 24 },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    paddingHorizontal: 24,
+  },
   logo: {
-  width: 140,
-  height: 140,
-  resizeMode: "contain",
-  alignSelf: "center",
-  marginBottom: 20,
-},
-
-  title: { fontSize: 28, fontWeight: "bold", marginBottom: 24, textAlign: "center" },
-  input: { borderWidth: 1, borderColor: "#ccc", borderRadius: 8, paddingHorizontal: 12, paddingVertical: 10, marginBottom: 12 },
-  btn: { backgroundColor: "#023e8a", paddingVertical: 12, borderRadius: 8, alignItems: "center", marginTop: 8 },
-  btnText: { color: "white", fontWeight: "600", fontSize: 16 },
-  orText: { textAlign: "center", marginVertical: 16, color: "#555" },
-  googleBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: "#ccc", borderRadius: 8, paddingVertical: 10, marginBottom: 16 },
-  googleLogo: { width: 20, height: 20, marginRight: 10 },
-  googleText: { color: "#000", fontWeight: "600", fontSize: 16 },
-  link: { marginTop: 10, textAlign: "center", color: "#007AFF" },
-  error: { color: "red", marginBottom: 8, textAlign: "center" },
+    width: 140,
+    height: 140,
+    resizeMode: "contain",
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 24,
+    textAlign: "center",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 12,
+  },
+  btn: {
+    backgroundColor: "#023e8a",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 8,
+  },
+  btnText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  orText: {
+    textAlign: "center",
+    marginVertical: 16,
+    color: "#555",
+  },
+  googleBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingVertical: 10,
+    marginBottom: 16,
+  },
+  googleLogo: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  googleText: {
+    color: "#000",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  link: {
+    marginTop: 10,
+    textAlign: "center",
+    color: "#007AFF",
+  },
+  error: {
+    color: "red",
+    marginBottom: 8,
+    textAlign: "center",
+  },
 });
