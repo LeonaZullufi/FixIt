@@ -76,8 +76,17 @@ const Login = () => {
 
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
-      router.replace("/");
+      const user = await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+      );
+
+      if (email.trim() === "admin@gmail.com") {
+        router.replace("/(admin)/AdminDashboard");
+      } else {
+        router.replace("/");
+      }
     } catch (err) {
       console.log("Email login error:", err);
       setError("Email ose fjalëkalim gabim.");
@@ -113,10 +122,7 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../../assets/FixIt.png")}
-        style={styles.logo}
-      />
+      <Image source={require("../../assets/FixIt.png")} style={styles.logo} />
 
       <Text style={styles.title}>Kyçu</Text>
 
